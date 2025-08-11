@@ -9,6 +9,9 @@ export default [
     route('kaoskaki/edit/:id', 'routes/admin/form/form-input-kaos.tsx', {
       id: 'edit-kaoskaki',
     }),
+    route('kaoskaki/detail', 'routes/admin/form/detail-kaos.tsx', {
+      id: 'detail-kaoskaki',
+    }),
     route('all-users', 'routes/admin/all-users.tsx'),
   ]),
 ] satisfies RouteConfig;

@@ -1,6 +1,7 @@
 import { Book, PencilRulerIcon, Plus, Search, Trash } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { redirect, useNavigate } from 'react-router';
+import Loader from '~/components/layouts/Loader';
 
 interface JenisBahan {
   _id: string;
@@ -26,21 +27,25 @@ interface KaosKaki {
 
 const Dashboard: React.FC = () => {
   const [data, setData] = useState<KaosKaki[]>([]);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         // Ganti URL ini dengan endpoint API Anda
+        setLoading(true);
         const res = await fetch('http://localhost:3000/api/v1/kaoskakis')
           .then((res) => res.json())
           .then((res) => {
             if (res.success && Array.isArray(res.data)) {
               setData(res.data); // langsung ambil array-nya
+
               console.log(JSON.stringify(res.data));
             }
           })
-          .catch((err) => console.error(err));
+          .catch((err) => console.error(err))
+          .finally(() => setLoading(false));
       } catch (err) {
         console.error(err);
       }
@@ -65,6 +70,8 @@ const Dashboard: React.FC = () => {
   const deleteKaosKaki = (id: string) => {
     alert('Hapus Kaos Kaki: ' + id);
   };
+
+  if (loading) return <Loader />;
 
   return (
     <div className='main p-5'>
