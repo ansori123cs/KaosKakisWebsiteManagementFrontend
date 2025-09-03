@@ -85,15 +85,36 @@ import AppLayout from './layout/AppLayout';
 import { ScrollToTop } from './components/common/ScrollToTop';
 import Home from './pages/Dashboard/Home';
 import ProtectedRoute from './routes/ProtectedRoute';
+import LandingPage from './routes/user/LandingPage';
+import DashboardPage from './routes/admin/dashboard/DashboardPage';
+import UkuranPage from './routes/admin/master/ukuran/UkuranPage';
+import WarnaPage from './routes/admin/master/warna/WarnaPage';
+import MesinPage from './routes/admin/master/mesin/MesinPage';
+import BahanPage from './routes/admin/master/bahan/BahanPage';
 
 export default function App() {
   return (
     <Router>
       <ScrollToTop />
       <Routes>
+        {/* user anonymus */}
+        {/* Homepage */}
+        <Route index path='/' element={<LandingPage />} />
+
+        {/* admin page */}
+        <Route element={<AppLayout />}>
+          {/* dashboar page */}
+          <Route index path='/dashboard' element={<DashboardPage />} />
+          {/* master page */}
+          <Route path='/bahan' element={<BahanPage />} />
+          <Route path='/ukuran' element={<UkuranPage />} />
+          <Route path='/warna' element={<WarnaPage />} />
+          <Route path='/mesin' element={<MesinPage />} />
+        </Route>
+
         {/* Dashboard Layout */}
         <Route element={<AppLayout />}>
-          <Route index path='/' element={<Home />} />
+          <Route index path='/template' element={<Home />} />
 
           {/* Protected - hanya user login */}
           <Route
