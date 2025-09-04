@@ -91,6 +91,8 @@ import UkuranPage from './routes/admin/master/ukuran/UkuranPage';
 import WarnaPage from './routes/admin/master/warna/WarnaPage';
 import MesinPage from './routes/admin/master/mesin/MesinPage';
 import BahanPage from './routes/admin/master/bahan/BahanPage';
+import FormAddBahan from './routes/admin/master/bahan/FormAddBahan';
+import FormEditBahan from './routes/admin/master/bahan/FormEditBahan';
 
 export default function App() {
   return (
@@ -106,9 +108,15 @@ export default function App() {
           {/* dashboar page */}
           <Route index path='/dashboard' element={<DashboardPage />} />
           {/* master page */}
+          {/* master jenis bahan */}
           <Route path='/bahan' element={<BahanPage />} />
+          <Route path='/bahan/new' element={<FormAddBahan />} />
+          <Route path='/bahan/edit/:id' element={<FormEditBahan />} />
+          {/* master jenis ukuran */}
           <Route path='/ukuran' element={<UkuranPage />} />
+          {/* master jenis warna */}
           <Route path='/warna' element={<WarnaPage />} />
+          {/* master jenis warnamesin */}
           <Route path='/mesin' element={<MesinPage />} />
         </Route>
 

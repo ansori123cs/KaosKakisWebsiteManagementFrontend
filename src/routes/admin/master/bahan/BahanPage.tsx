@@ -1,208 +1,212 @@
 import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 import ComponentCard from '../../../../components/common/ComponentCard';
 import Button from '../../../../components/ui/button/Button';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../../../components/ui/table';
 import Loader from '../../../../components/ui/loader/Loader';
 import Input from '../../../../components/form/input/InputField';
+import { PencilLine, Plus, Search, Trash } from 'lucide-react';
+import { useNavigate } from 'react-router';
 
-interface IBahanResponse {
-  bahanList: IBahan[];
-  isNext: boolean;
-  isPrev: boolean;
-  position: number;
-  totalPage: number;
+// Interface response
+interface JenisBahanResponse {
+  success: boolean;
+  message: string;
+  data: {
+    jenisBahanList: JenisBahan[];
+    pagination: Pagination;
+  };
 }
 
-interface IBahan {
+interface JenisBahan {
   id: number;
-  namaBahan: string;
+  nama: string;
+  kode_bahan: string;
+  status: number; // 0 = tidak aktif, 1 = aktif
 }
 
-const bahanResponse: IBahanResponse = {
-  bahanList: [
-    {
-      id: 1,
-      namaBahan: 'Spandek',
+interface Pagination {
+  currentPage: number;
+  itemsPerPage: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+// Dummy data
+const bahanResponse: JenisBahanResponse = {
+  success: true,
+  message: 'List Jenis Bahan berhasil diambil',
+  data: {
+    jenisBahanList: [
+      { id: 3, nama: 'spandek 20s', kode_bahan: 'spdpe30s', status: 1 },
+      { id: 4, nama: 'nilon 30s', kode_bahan: 'n30s', status: 1 },
+      { id: 5, nama: 'campuran', kode_bahan: 'camp', status: 1 },
+      { id: 6, nama: 'polyster 20s', kode_bahan: 'ply20s', status: 1 },
+      { id: 7, nama: 'PE Warna Warni', kode_bahan: 'PEW', status: 0 },
+      { id: 8, nama: 'PE Warna Warni', kode_bahan: 'PEW', status: 0 },
+      { id: 9, nama: 'PE Warna Warni', kode_bahan: 'PEW', status: 0 },
+      { id: 10, nama: 'PE Warna Warni', kode_bahan: 'PEW', status: 0 },
+      { id: 11, nama: 'PE Warna Warni', kode_bahan: 'PEW', status: 0 },
+      { id: 12, nama: 'PE Warna Warni', kode_bahan: 'PEW', status: 0 },
+    ],
+    pagination: {
+      currentPage: 1,
+      itemsPerPage: 10,
+      totalItems: 5,
+      totalPages: 1,
+      hasNextPage: false,
+      hasPreviousPage: false,
     },
-    {
-      id: 2,
-      namaBahan: 'Nilon',
-    },
-    {
-      id: 3,
-      namaBahan: 'Polyster',
-    },
-    {
-      id: 4,
-      namaBahan: 'Spandek Warna',
-    },
-  ],
-  isNext: true,
-  isPrev: true,
-  position: 5,
-  totalPage: 10,
+  },
 };
 
 const BahanPage = () => {
-  const [dataBahan, setDataBahan] = useState<IBahan[]>();
+  // ✅ default state
+  const [dataBahan, setDataBahan] = useState<JenisBahan[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isNext, setIsNext] = useState(false);
   const [isPrev, setIsPrev] = useState(false);
   const [totalPage, setTotalPage] = useState(0);
-  const [position, setPosition] = useState(0);
+  const [position, setPosition] = useState(1); // currentPage mulai dari 1
   const [searchKey, setSearchKey] = useState('');
+
+  let navigate = useNavigate();
 
   useEffect(() => {
     const getDataBahan = () => {
       setIsLoading(true);
-      setDataBahan(bahanResponse.bahanList);
-      setIsNext(bahanResponse.isNext);
-      setIsPrev(bahanResponse.isPrev);
-      setPosition(bahanResponse.position);
-      setTotalPage(bahanResponse.totalPage);
+
+      // ✅ ambil data dari dummy
+      setDataBahan(bahanResponse.data.jenisBahanList);
+      setIsNext(bahanResponse.data.pagination.hasNextPage);
+      setIsPrev(bahanResponse.data.pagination.hasPreviousPage);
+      setPosition(bahanResponse.data.pagination.currentPage);
+      setTotalPage(bahanResponse.data.pagination.totalPages);
+
+      setIsLoading(false);
     };
 
     getDataBahan();
-    setIsLoading(false);
   }, []);
 
   const addBahan = () => {
-    console.log('Tambah Bahan');
+    navigate('/bahan/new');
   };
   const searchBahan = () => {
-    console.log('Dicari Bahan :' + searchKey);
+    Swal.fire({
+      title: 'Data Tidak Ditemukan',
+      text: 'Coba Cari Dengan Kata Kunci Lain : ' + searchKey,
+      icon: 'question',
+      confirmButtonText: 'OK',
+      backdrop: true, // Pastikan ada backdrop
+    });
   };
   const editBahan = (id: number) => {
-    console.log('Edit Bahan :' + id);
+    navigate('/bahan/edit/' + id);
   };
   const deleteBahan = (id: number) => {
-    console.log('Delete Bahan :' + id);
+    Swal.fire({
+      title: 'Data Berhasil Di Hapus',
+      text: 'Data yang di Hapus :' + id,
+      icon: 'success',
+      confirmButtonText: 'OK',
+      backdrop: true, // Pastikan ada backdrop
+    });
   };
 
   if (isLoading) return <Loader />;
 
   return (
-    <>
-      <ComponentCard title='Tabel Bahan'>
-        <div className='flex justify-between'>
-          {' '}
-          <Button
-            size='sm'
-            variant='success'
-            onClick={() => addBahan()}
-            startIcon={
-              <svg className='w-6 h-6 text-white dark:text-white' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='none' viewBox='0 0 24 24'>
-                <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M5 12h14m-7 7V5' />
-              </svg>
-            }
-          >
-            Tambah Baru
+    <ComponentCard title='Tabel Bahan'>
+      {/* Header atas: tombol tambah + search */}
+      <div className='flex justify-between'>
+        <Button size='sm' variant='success' onClick={addBahan} startIcon={<Plus size={20} />}>
+          Tambah Baru
+        </Button>
+
+        <div className='flex flex-row'>
+          <Input type='text' placeholder='Cari bahan' id='searchBar' onChange={(e) => setSearchKey(e.target.value)} />
+          <Button size='sm' className='ms-2' onClick={searchBahan} startIcon={<Search size={20} />}>
+            Cari
           </Button>
-          <div className='flex flex-row'>
-            <Input
-              type='text'
-              placeholder='Cari bahan'
-              id='searchBar'
-              onChange={(e) => {
-                setSearchKey(e.target.value);
-              }}
-            />
-            <Button size='sm' className='ms-2' onClick={() => searchBahan()}>
-              Cari
-            </Button>
-          </div>
         </div>
-        <div className='overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03]'>
-          <div className='max-w-full overflow-x-auto'>
-            <Table>
-              <TableHeader className='border-b border-gray-100 dark:border-white/[0.05]'>
-                <TableRow>
-                  <TableCell isHeader className='px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400'>
-                    No
-                  </TableCell>
-                  <TableCell isHeader className='px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400'>
-                    Nama Bahan
-                  </TableCell>
-                  <TableCell isHeader className='px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400'>
-                    Action
+      </div>
+
+      {/* Table */}
+      <div className='overflow-hidden rounded-xl  border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] mt-4'>
+        <div className='max-w-full overflow-x-auto'>
+          <Table>
+            <TableHeader className='border-b text-left border-gray-100 dark:border-white/[0.05]'>
+              <TableRow>
+                <TableCell isHeader className='text-center'>
+                  No
+                </TableCell>
+                <TableCell isHeader>Nama Bahan</TableCell>
+                <TableCell isHeader>Action</TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {dataBahan.map((item, index) => (
+                <TableRow key={item.id} className='hover:bg-gray-100'>
+                  <TableCell className='py-0.5 border-x px-0.5  border-gray-200 text-center'>{index + 1}</TableCell>
+                  <TableCell className='py-0.5 border-x px-0.5  border-gray-200 '>{item.nama}</TableCell>
+                  <TableCell className='py-0.5 border-x px-0.5  border-gray-200 '>
+                    <div className='flex items-center gap-2'>
+                      <Button size='sm' variant='warning' onClick={() => editBahan(item.id)} startIcon={<PencilLine size={20} />}>
+                        Edit
+                      </Button>
+                      <Button size='sm' variant='danger' onClick={() => deleteBahan(item.id)} startIcon={<Trash size={20} />}>
+                        Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
-              </TableHeader>
-              <TableBody>
-                {dataBahan?.map((item, index) => (
-                  <TableRow key={item.id}>
-                    <TableCell isHeader className='px-5 py-3 text-start font-medium text-gray-500  text-theme-xs dark:text-gray-400'>
-                      {index + 1}
-                    </TableCell>
-                    <TableCell isHeader className='px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400'>
-                      {item.namaBahan}
-                    </TableCell>
-                    <TableCell isHeader className='px-5 py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400'>
-                      <div className='flex items-center gap-2'>
-                        <Button size='sm' variant='warning' onClick={() => editBahan(item.id)}>
-                          Edit
-                        </Button>
-                        <Button size='sm' variant='danger' onClick={() => deleteBahan(item.id)}>
-                          Delete
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-        <div className='flex justify-end'>
-          <nav aria-label='Page navigation example'>
-            <ul className='flex items-center -space-x-px h-8 text-sm'>
-              {/* Previous button */}
-              {isPrev && (
-                <li>
-                  <a
-                    href='#'
-                    className='flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
-                  >
-                    <span className='sr-only'>Previous</span>
-                    <svg className='w-2.5 h-2.5 rtl:rotate-180' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 6 10'>
-                      <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M5 1 1 5l4 4' />
-                    </svg>
-                  </a>
-                </li>
-              )}
-
-              {/* Page numbers */}
-              {Array.from({ length: totalPage }, (_, i) => (
-                <li key={i}>
-                  <a
-                    href='#'
-                    className={`flex items-center justify-center px-3 h-8 leading-tight border border-gray-300 
-        ${position === i + 1 ? 'text-blue-600 bg-blue-50 dark:bg-gray-700 dark:text-white' : 'text-gray-500 bg-white dark:bg-gray-800 dark:text-gray-400'}
-        hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white`}
-                  >
-                    {i + 1}
-                  </a>
-                </li>
               ))}
-              {/* Next button */}
-              {isNext && (
-                <li>
-                  <a
-                    href='#'
-                    className='flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white'
-                  >
-                    <span className='sr-only'>Next</span>
-                    <svg className='w-2.5 h-2.5 rtl:rotate-180' aria-hidden='true' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 6 10'>
-                      <path stroke='currentColor' strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='m1 9 4-4-4-4' />
-                    </svg>
-                  </a>
-                </li>
-              )}
-            </ul>
-          </nav>
+            </TableBody>
+          </Table>
         </div>
-      </ComponentCard>
-    </>
+      </div>
+
+      {/* Pagination */}
+      <div className='flex justify-end mt-3'>
+        <nav aria-label='Page navigation'>
+          <ul className='flex items-center -space-x-px h-8 text-sm'>
+            {/* Prev */}
+            {isPrev && (
+              <li>
+                <a href='#' className='flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border rounded-s-lg hover:bg-gray-100'>
+                  Prev
+                </a>
+              </li>
+            )}
+
+            {/* Page numbers */}
+            {Array.from({ length: totalPage }, (_, i) => (
+              <li key={i}>
+                <a
+                  href='#'
+                  className={`flex items-center justify-center px-3 h-8 leading-tight border 
+                    ${position === i + 1 ? 'text-blue-600 bg-blue-50' : 'text-gray-500 bg-white hover:bg-gray-100'}`}
+                >
+                  {i + 1}
+                </a>
+              </li>
+            ))}
+
+            {/* Next */}
+            {isNext && (
+              <li>
+                <a href='#' className='flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border rounded-e-lg hover:bg-gray-100'>
+                  Next
+                </a>
+              </li>
+            )}
+          </ul>
+        </nav>
+      </div>
+    </ComponentCard>
   );
 };
 
