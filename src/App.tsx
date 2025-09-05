@@ -93,6 +93,13 @@ import MesinPage from './routes/admin/master/mesin/MesinPage';
 import BahanPage from './routes/admin/master/bahan/BahanPage';
 import FormAddBahan from './routes/admin/master/bahan/FormAddBahan';
 import FormEditBahan from './routes/admin/master/bahan/FormEditBahan';
+import FormAddMesin from './routes/admin/master/mesin/FormAddMesin';
+import FormEditMesin from './routes/admin/master/mesin/FormEditMesin';
+import FormAddUkuran from './routes/admin/master/ukuran/FormAddUkuran';
+import FormEditUkuran from './routes/admin/master/ukuran/FormEditUkuran';
+import FormAddWarna from './routes/admin/master/warna/FormAddWarna';
+import FormEditWarna from './routes/admin/master/warna/FormEditWarna';
+import KaosKakiPage from './routes/admin/kaos-kakis/KaosKakiPage';
 
 export default function App() {
   return (
@@ -114,10 +121,19 @@ export default function App() {
           <Route path='/bahan/edit/:id' element={<FormEditBahan />} />
           {/* master jenis ukuran */}
           <Route path='/ukuran' element={<UkuranPage />} />
+          <Route path='/ukuran/new' element={<FormAddUkuran />} />
+          <Route path='/ukuran/edit/:id' element={<FormEditUkuran />} />
           {/* master jenis warna */}
           <Route path='/warna' element={<WarnaPage />} />
+          <Route path='/warna/new' element={<FormAddWarna />} />
+          <Route path='/warna/edit/:id' element={<FormEditWarna />} />
           {/* master jenis warnamesin */}
           <Route path='/mesin' element={<MesinPage />} />
+          <Route path='/mesin/new' element={<FormAddMesin />} />
+          <Route path='/mesin/edit/:id' element={<FormEditMesin />} />
+
+          {/* kaos-kaki page */}
+          <Route path='/kaos-kaki' element={<KaosKakiPage />} />
         </Route>
 
         {/* Dashboard Layout */}

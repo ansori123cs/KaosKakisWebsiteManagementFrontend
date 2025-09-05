@@ -8,17 +8,17 @@ import Label from '../../../../components/form/Label';
 import Input from '../../../../components/form/input/InputField';
 import { useNavigate } from 'react-router-dom';
 
-interface IFormBahan {
+interface IFormUkuran {
   nama_jenis: string;
   kode_jenis: string;
 }
 
-const FormEditBahan = () => {
-  const [form, setForm] = useState<IFormBahan>({
+const FormEditUkuran = () => {
+  const [form, setForm] = useState<IFormUkuran>({
     nama_jenis: '',
     kode_jenis: '',
   });
-  const [initialForm, setInitialForm] = useState<IFormBahan>({
+  const [initialForm, setInitialForm] = useState<IFormUkuran>({
     nama_jenis: '',
     kode_jenis: '',
   });
@@ -29,7 +29,7 @@ const FormEditBahan = () => {
   useEffect(() => {
     const fetchData = async () => {
       // contoh dummy
-      const data = { nama_jenis: 'Katun', kode_jenis: 'KTN' };
+      const data = { nama_jenis: '21-22', kode_jenis: 'l' };
       setForm(data);
       setInitialForm(data);
     };
@@ -56,7 +56,7 @@ const FormEditBahan = () => {
         confirmButtonText: 'OK',
         backdrop: true,
       }).then(() => {
-        navigate('/bahan');
+        navigate('/Ukuran');
       });
     } catch (error) {
       Swal.fire({
@@ -70,47 +70,26 @@ const FormEditBahan = () => {
     }
   };
 
-  const isFormChanged =
-    form.nama_jenis !== initialForm.nama_jenis ||
-    form.kode_jenis !== initialForm.kode_jenis;
+  const isFormChanged = form.nama_jenis !== initialForm.nama_jenis || form.kode_jenis !== initialForm.kode_jenis;
 
   if (isLoading) return <Loader />;
 
   return (
-    <ComponentCard title='Form Edit Jenis Bahan'>
+    <ComponentCard title='Form Edit Jenis Ukuran'>
       <div className='container-form'>
         <div className='space-y-6'>
           <div>
-            <Label htmlFor='nama_jenis'>Nama Jenis Bahan</Label>
-            <Input
-              type='text'
-              id='nama_jenis'
-              name='nama_jenis'
-              value={form.nama_jenis}
-              onChange={handleChange}
-              placeholder='Masukkan nama bahan'
-            />
+            <Label htmlFor='nama_jenis'>Nama Jenis Ukuran</Label>
+            <Input type='text' id='nama_jenis' name='nama_jenis' value={form.nama_jenis} onChange={handleChange} placeholder='Masukkan nama Ukuran' />
           </div>
           <div>
-            <Label htmlFor='kode_jenis'>Kode Jenis Bahan</Label>
-            <Input
-              type='text'
-              id='kode_jenis'
-              name='kode_jenis'
-              value={form.kode_jenis}
-              onChange={handleChange}
-              placeholder='Masukkan kode bahan'
-            />
+            <Label htmlFor='kode_jenis'>Kode Jenis Ukuran</Label>
+            <Input type='text' id='kode_jenis' name='kode_jenis' value={form.kode_jenis} onChange={handleChange} placeholder='Masukkan kode Ukuran' />
           </div>
         </div>
       </div>
       <div className='container-button flex flex-row gap-2 justify-end mt-6'>
-        <Button
-          size='sm'
-          variant='danger'
-          onClick={() => navigate('/bahan')}
-          startIcon={<X size={20} />}
-        >
+        <Button size='sm' variant='danger' onClick={() => navigate('/Ukuran')} startIcon={<X size={20} />}>
           Batal Kembali
         </Button>
         <Button
@@ -118,7 +97,7 @@ const FormEditBahan = () => {
           variant='success'
           onClick={handleSubmit}
           startIcon={<Save size={20} />}
-          disabled={!isFormChanged} // tombol hanya aktif jika ada perubahan
+          disabled={!isFormChanged} // tombol hanya aktif jika ada peruUkuran
         >
           Simpan
         </Button>
@@ -127,4 +106,4 @@ const FormEditBahan = () => {
   );
 };
 
-export default FormEditBahan;
+export default FormEditUkuran;

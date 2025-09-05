@@ -144,6 +144,7 @@ const BahanPage = () => {
                   No
                 </TableCell>
                 <TableCell isHeader>Nama Bahan</TableCell>
+                <TableCell isHeader>Kode Bahan</TableCell>
                 <TableCell isHeader>Action</TableCell>
               </TableRow>
             </TableHeader>
@@ -152,6 +153,7 @@ const BahanPage = () => {
                 <TableRow key={item.id} className='hover:bg-gray-100'>
                   <TableCell className='py-0.5 border-x px-0.5  border-gray-200 text-center'>{index + 1}</TableCell>
                   <TableCell className='py-0.5 border-x px-0.5  border-gray-200 '>{item.nama}</TableCell>
+                  <TableCell className='py-0.5 border-x px-0.5  border-gray-200 '>{item.kode_bahan}</TableCell>
                   <TableCell className='py-0.5 border-x px-0.5  border-gray-200 '>
                     <div className='flex items-center gap-2'>
                       <Button size='sm' variant='warning' onClick={() => editBahan(item.id)} startIcon={<PencilLine size={20} />}>
