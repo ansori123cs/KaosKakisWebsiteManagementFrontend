@@ -100,6 +100,9 @@ import FormEditUkuran from './routes/admin/master/ukuran/FormEditUkuran';
 import FormAddWarna from './routes/admin/master/warna/FormAddWarna';
 import FormEditWarna from './routes/admin/master/warna/FormEditWarna';
 import KaosKakiPage from './routes/admin/kaos-kakis/KaosKakiPage';
+import FormAddKaosKaki from './routes/admin/kaos-kakis/FormAddKaosKaki';
+import FormEditKaosKaki from './routes/admin/kaos-kakis/FormEditKaosKaki';
+import DetailKaosKaki from './routes/admin/kaos-kakis/DetailKaosKaki';
 
 export default function App() {
   return (
@@ -134,6 +137,9 @@ export default function App() {
 
           {/* kaos-kaki page */}
           <Route path='/kaos-kaki' element={<KaosKakiPage />} />
+          <Route path='/kaos-kaki/new' element={<FormAddKaosKaki />} />
+          <Route path='/kaos-kaki/edit/:id' element={<FormEditKaosKaki />} />
+          <Route path='/kaos-kaki/detail/:id' element={<DetailKaosKaki />} />
         </Route>
 
         {/* Dashboard Layout */}

@@ -117,7 +117,7 @@ const KaosKakiPage = () => {
   }, []);
 
   const addKaosKaki = () => {
-    navigate('/kaoskaki/new');
+    navigate('/kaos-kaki/new');
   };
   const searchKaosKaki = () => {
     Swal.fire({
@@ -129,18 +129,42 @@ const KaosKakiPage = () => {
     });
   };
   const detailKaosKaki = (id: number) => {
-    navigate('/kaoskaki/detail/' + id);
+    navigate('/kaos-kaki/detail/' + id);
   };
   const editKaosKaki = (id: number) => {
-    navigate('/kaoskaki/edit/' + id);
+    navigate('/kaos-kaki/edit/' + id);
   };
   const deleteKaosKaki = (id: number) => {
     Swal.fire({
-      title: 'Data Berhasil Dihapus',
-      text: 'Data yang dihapus: ' + id,
-      icon: 'success',
-      confirmButtonText: 'OK',
+      title: 'Apakah Anda yakin?',
+      text: `Data dengan ID ${id} akan dihapus secara permanen!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal',
+      reverseButtons: true,
       backdrop: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          // TODO: panggil API / fungsi hapus data di sini
+          Swal.fire({
+            title: 'Berhasil!',
+            text: `Data dengan ID ${id} telah dihapus.`,
+            icon: 'success',
+            confirmButtonText: 'OK',
+            backdrop: true,
+          });
+        } catch (error) {
+          Swal.fire({
+            title: 'Error!',
+            text: `Terdapat kesalahan sistem`,
+            icon: 'error',
+            confirmButtonText: 'OK',
+            backdrop: true,
+          });
+        }
+      }
     });
   };
 
