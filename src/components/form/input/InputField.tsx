@@ -1,8 +1,8 @@
-import type React from "react";
-import type { FC } from "react";
+import type React from 'react';
+import type { FC } from 'react';
 
 interface InputProps {
-  type?: "text" | "number" | "email" | "password" | "date" | "time" | string;
+  type?: 'text' | 'number' | 'email' | 'password' | 'date' | 'time' | string;
   id?: string;
   name?: string;
   placeholder?: string;
@@ -18,22 +18,7 @@ interface InputProps {
   hint?: string;
 }
 
-const Input: FC<InputProps> = ({
-  type = "text",
-  id,
-  name,
-  placeholder,
-  value,
-  onChange,
-  className = "",
-  min,
-  max,
-  step,
-  disabled = false,
-  success = false,
-  error = false,
-  hint,
-}) => {
+const Input: FC<InputProps> = ({ type = 'text', id, name, placeholder, value, onChange, className = '', min, max, step, disabled = false, success = false, error = false, hint }) => {
   let inputClasses = ` h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3  dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 ${className}`;
 
   if (disabled) {
@@ -47,34 +32,10 @@ const Input: FC<InputProps> = ({
   }
 
   return (
-    <div className="relative">
-      <input
-        type={type}
-        id={id}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        min={min}
-        max={max}
-        step={step}
-        disabled={disabled}
-        className={inputClasses}
-      />
+    <div className='relative'>
+      <input type={type} id={id} name={name} placeholder={placeholder} value={value} onChange={onChange} min={min} max={max} step={step} disabled={disabled} className={inputClasses} />
 
-      {hint && (
-        <p
-          className={`mt-1.5 text-xs ${
-            error
-              ? "text-error-500"
-              : success
-              ? "text-success-500"
-              : "text-gray-500"
-          }`}
-        >
-          {hint}
-        </p>
-      )}
+      {hint && <p className={`mt-1.5 text-xs ${error ? 'text-error-500' : success ? 'text-success-500' : 'text-gray-500'}`}>{hint}</p>}
     </div>
   );
 };
