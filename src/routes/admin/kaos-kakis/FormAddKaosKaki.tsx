@@ -8,7 +8,7 @@ import Label from '../../../components/form/Label';
 import Input from '../../../components/form/input/InputField';
 import Select from '../../../components/form/Select';
 import Button from '../../../components/ui/button/Button';
-import { Save, X } from 'lucide-react';
+import { Plus, Save, Trash, X } from 'lucide-react';
 import TextArea from '../../../components/form/input/TextArea';
 import DatePicker from '../../../components/form/date-picker';
 import DropzoneComponent from '../../../components/form/form-elements/DropZone';
@@ -34,33 +34,33 @@ interface IFormKaosKaki {
 const variasiMesin = [
   {
     label: 'THS',
-    value: 1,
+    value: '1',
   },
   {
     label: 'YauShen',
-    value: 2,
+    value: '2',
   },
   {
     label: 'Manual',
-    value: 3,
+    value: '3',
   },
 ];
 const variasiKaos = [
   {
     label: '1/2 Telapak hitam',
-    value: 1,
+    value: '1',
   },
   {
     label: 'Telapak Hitam Full',
-    value: 2,
+    value: '2',
   },
   {
     label: 'Hitam Polos',
-    value: 3,
+    value: '3',
   },
   {
     label: 'Putih Polos',
-    value: 4,
+    value: '4',
   },
 ];
 const variasiJenisBahan = [
@@ -91,6 +91,7 @@ const FormAddKaosKaki = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const navigate = useNavigate();
 
   // handle regular input
@@ -131,23 +132,28 @@ const FormAddKaosKaki = () => {
     });
   };
 
-  //handle dynamic input mesin
+  // Handle dynamic input mesin
   const addMesin = () => {
-    setForm({
-      ...form,
-      kode_mesin: [...form.kode_mesin, 0],
-    });
+    setForm((prev) => ({
+      ...prev,
+      kode_mesin: [...prev.kode_mesin, 0], // Tambah default mesin = 0
+    }));
   };
-  const updateMesin = (index: number, value: number) => {
+
+  const updateMesin = (index: number, value: string) => {
     const updated = [...form.kode_mesin];
-    updated[index] = value;
-    setForm({ ...form, kode_mesin: updated });
-  };
-  const removeMesin = (index: number) => {
+    updated[index] = Number(value); // ✅ ubah ke number
     setForm({
       ...form,
-      kode_mesin: form.kode_mesin.filter((_, i) => i !== index),
+      kode_mesin: updated,
     });
+  };
+
+  const removeMesin = (index: number) => {
+    setForm((prev) => ({
+      ...prev,
+      kode_mesin: prev.kode_mesin.filter((_, i) => i !== index), // filter index
+    }));
   };
 
   //handle dynamic input variasi kaos kaki
@@ -184,16 +190,16 @@ const FormAddKaosKaki = () => {
         formData.append('images', file);
       });
 
-      form.kode_mesin.forEach((id) => {
-        formData.append('kode_mesin', String(id));
+      form.kode_mesin.forEach((id, idx) => {
+        formData.append(`kode_mesin[${idx}]`, String(id));
       });
 
-      // formData.append('kaos_kaki_variasi', JSON.stringify(form.kaos_kaki_variasi));
-      // const plainObject: Record<string, any> = {};
-      // formData.forEach((value, key) => {
-      //   plainObject[key] = value;
-      // });
-      // console.log(JSON.stringify(plainObject, null, 2));
+      formData.append('kaos_kaki_variasi', JSON.stringify(form.kaos_kaki_variasi));
+      const plainObject: Record<string, any> = {};
+      formData.forEach((value, key) => {
+        plainObject[key] = value;
+      });
+      console.log(JSON.stringify(plainObject, null, 2));
 
       // const res = await fetch('http://localhost:3000/api/v1/kaoskakis', {
       //   method: 'POST',
@@ -249,21 +255,45 @@ const FormAddKaosKaki = () => {
             <TextArea value={form.keterangan || ''} onChange={handleChangeTextArea} rows={3} placeholder='Masukkan Keterangan' />
           </div>
           <div>
-            <Label htmlFor='foto'>Foto</Label>
-            <DropzoneComponent onFilesIploaded={handleUploadedFile} />
-          </div>
-          <div>
-            {uploadedFiles.length > 0 && (
-              <div className='preview'>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
+              <div>
+                <DropzoneComponent label='Upload Foto' onFilesIploaded={handleUploadedFile} />
+              </div>
+              <div>
                 <Label>Preview Foto</Label>
-                {uploadedFiles.map((file, index) => (
-                  <div key={index}>
-                    {file.name}
-                    <ResponsiveImage src={URL.createObjectURL(file)} />
+                {uploadedFiles.length > 0 && (
+                  <div className='grid grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
+                    {uploadedFiles.map((file, index) => (
+                      <div key={index} className='flex flex-col items-center space-y-2' onClick={() => setSelectedImage(URL.createObjectURL(file))}>
+                        <ResponsiveImage src={URL.createObjectURL(file)} alt={file.name} className='w-32 h-32 object-cover rounded border' />
+                        <span className='text-xs text-gray-600 truncate w-32 text-center'>{file.name}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
+              </div>
+            </div>
+            {/* Modal Preview */}
+            {selectedImage && (
+              <div className='fixed inset-0 bg-black/80 flex items-center justify-center z-99999999 ' onClick={() => setSelectedImage(null)}>
+                <img src={selectedImage} alt='preview besar' className='max-w-[90%] max-h-[90%] rounded-lg shadow-lg' />
               </div>
             )}
+          </div>
+          <div>
+            <Label>Tambahkan Mesin</Label>
+            {form.kode_mesin.map((val, idx) => (
+              <div key={idx} className='flex gap-2 mb-2'>
+                <Select options={variasiMesin} placeholder='Select Option' onChange={(_, value) => updateMesin(idx, value)} className='dark:bg-dark-900' />
+
+                <Button size='sm' variant='danger' onClick={() => removeMesin(idx)} startIcon={<Trash size={20} />}>
+                  Hapus
+                </Button>
+              </div>
+            ))}
+            <Button size='sm' variant='primary' onClick={addMesin} startIcon={<Plus size={20} />}>
+              Tambah Mesin
+            </Button>
           </div>
         </div>
         <div className='container-button flex flex-row gap-2 justify-end mt-6'>
