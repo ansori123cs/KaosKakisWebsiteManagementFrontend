@@ -4,6 +4,13 @@ import { useNavigate } from 'react-router';
 import Loader from '../../../components/ui/loader/Loader';
 import { useDropzone } from 'react-dropzone';
 import Swal from 'sweetalert2';
+import Label from '../../../components/form/Label';
+import Input from '../../../components/form/input/InputField';
+import Select from '../../../components/form/Select';
+import Button from '../../../components/ui/button/Button';
+import { Save, X } from 'lucide-react';
+import TextArea from '../../../components/form/input/TextArea';
+import DatePicker from '../../../components/form/date-picker';
 
 interface IVariasiKaos {
   ukuran: number;
@@ -24,44 +31,48 @@ interface IFormKaosKaki {
 //mock data select
 const variasiMesin = [
   {
-    nama_mesin: 'THS',
-    kode_mesin: 1,
+    label: 'THS',
+    value: 1,
   },
   {
-    nama_mesin: 'YauShen',
-    kode_mesin: 2,
+    label: 'YauShen',
+    value: 2,
   },
   {
-    nama_mesin: 'Manual',
-    kode_mesin: 3,
+    label: 'Manual',
+    value: 3,
   },
 ];
 const variasiKaos = [
   {
-    warna: 1,
-    ukuran: 1,
+    label: '1/2 Telapak hitam',
+    value: 1,
   },
   {
-    warna: 2,
-    ukuran: 2,
+    label: 'Telapak Hitam Full',
+    value: 2,
   },
   {
-    warna: 3,
-    ukuran: 3,
+    label: 'Hitam Polos',
+    value: 3,
+  },
+  {
+    label: 'Putih Polos',
+    value: 4,
   },
 ];
 const variasiJenisBahan = [
   {
-    nama_bahan: 'Nilon',
-    value: 1,
+    label: 'Nilon',
+    value: '1',
   },
   {
-    nama_bahan: 'Spandek',
-    value: 2,
+    label: 'Spandek',
+    value: '2',
   },
   {
-    nama_bahan: 'Campuran',
-    value: 3,
+    label: 'Campuran',
+    value: '3',
   },
 ];
 const FormAddKaosKaki = () => {
@@ -86,6 +97,17 @@ const FormAddKaosKaki = () => {
       ...form,
       [name]: value,
     });
+    // console.log('myForm :' + JSON.stringify(form, null, ' '));
+    // console.log(name + ':' + value);
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setForm({
+      ...form,
+      [name]: Number(value),
+    });
+    // console.log(name + ':' + value);
+    // console.log('myForm :' + JSON.stringify(form, null, ' '));
   };
 
   // handle file upload input
@@ -149,12 +171,12 @@ const FormAddKaosKaki = () => {
   const handleSubmit = async () => {
     setIsLoading(true);
     try {
-      const formData = new FormData();
+      let formData = new FormData();
       formData.append('nama_kaos', form.nama_kaos);
       formData.append('jenis_bahan_id', String(form.jenis_bahan_id));
       formData.append('keterangan', form.keterangan);
       formData.append('tgl_terakhir_pesan', form.tgl_terakhir_pesan);
-      formData.append('kode_kaos', form.kode_kaos_kaki);
+      formData.append('kode_kaos_kaki', form.kode_kaos_kaki);
 
       form.images.forEach((file) => {
         formData.append('images', file);
@@ -164,19 +186,24 @@ const FormAddKaosKaki = () => {
         formData.append('kode_mesin', String(id));
       });
 
-      formData.append('kaos_kaki_variasi', JSON.stringify(form.kaos_kaki_variasi));
+      // formData.append('kaos_kaki_variasi', JSON.stringify(form.kaos_kaki_variasi));
+      // const plainObject: Record<string, any> = {};
+      // formData.forEach((value, key) => {
+      //   plainObject[key] = value;
+      // });
+      // console.log(JSON.stringify(plainObject, null, 2));
 
-      const res = await fetch('http://localhost:3000/api/v1/kaoskakis', {
-        method: 'POST',
-        headers: {
-          Authorization: 'Bearer token',
-        },
-        body: formData,
-      });
+      // const res = await fetch('http://localhost:3000/api/v1/kaoskakis', {
+      //   method: 'POST',
+      //   headers: {
+      //     Authorization: 'Bearer token',
+      //   },
+      //   body: formData,
+      // });
 
-      if (!res.ok) throw new Error('Gagal Menambahkan Data Kaos');
+      // if (!res.ok) throw new Error('Gagal Menambahkan Data Kaos');
 
-      Swal.fire('Berhasil', 'Data Berhasil Ditambahkan', 'success').then(() => navigate('/kaos-kaki'));
+      // Swal.fire('Berhasil', 'Data Berhasil Ditambahkan', 'success').then(() => navigate('/kaos-kaki'));
     } catch (error) {
       Swal.fire('Error', 'Terjadi Kesalahan Sistem', 'error');
     } finally {
@@ -186,9 +213,48 @@ const FormAddKaosKaki = () => {
   if (isLoading) return <Loader />;
 
   return (
-    <ComponentCard title='Form Jenis Bahan Baru'>
+    <ComponentCard title='Form Kaos Kaki Baru Baru'>
       <div className='container-form'>
-        <div className='space-y-6'></div>
+        <div className='space-y-6'>
+          <div>
+            <Label htmlFor='nama_kaos'>Nama Kaos Kaki</Label>
+            <Input type='text' id='nama_kaos' name='nama_kaos' value={form.nama_kaos} onChange={handleChange} placeholder='Masukkan Nama Kaos Kaki' />
+          </div>
+          <div>
+            <Label htmlFor='kode_kaos_kaki'>Kode Kaos Kaki</Label>
+            <Input type='text' id='kode_kaos_kaki' name='kode_kaos_kaki' value={form.kode_kaos_kaki} onChange={handleChange} placeholder='Masukkan Kode Kaos Kaki' />
+          </div>
+          <div>
+            <Label>Pilih Bahan</Label>
+            <Select options={variasiJenisBahan} placeholder='Select Option' onChange={handleSelectChange} name='jenis_bahan_id' id='jenis_bahan_id' className='dark:bg-dark-900' />
+          </div>
+          <div>
+            <DatePicker
+              id='date-picker'
+              label='Tanggal terakhir Order'
+              placeholder='Select a date'
+              onChange={(dates, currentDateString) => {
+                setForm({
+                  ...form,
+                  tgl_terakhir_pesan: currentDateString,
+                });
+                console.log({ dates, currentDateString });
+              }}
+            />
+          </div>
+          <div>
+            <Label htmlFor='keterangan'>Keterangan</Label>
+            <TextArea name='keterangan' value={form.keterangan} onChange={handleSelectChange} placeholder='Masukkan Keterangan' />
+          </div>
+        </div>
+        <div className='container-button flex flex-row gap-2 justify-end mt-6'>
+          <Button size='sm' variant='danger' onClick={() => navigate('/bahan')} startIcon={<X size={20} />}>
+            Batal Kembali
+          </Button>
+          <Button size='sm' variant='success' onClick={handleSubmit} startIcon={<Save size={20} />}>
+            Simpan
+          </Button>
+        </div>
       </div>
     </ComponentCard>
   );
