@@ -11,6 +11,8 @@ import Button from '../../../components/ui/button/Button';
 import { Save, X } from 'lucide-react';
 import TextArea from '../../../components/form/input/TextArea';
 import DatePicker from '../../../components/form/date-picker';
+import DropzoneComponent from '../../../components/form/form-elements/DropZone';
+import ResponsiveImage from '../../../components/ui/images/ResponsiveImage';
 
 interface IVariasiKaos {
   ukuran: number;
@@ -88,6 +90,7 @@ const FormAddKaosKaki = () => {
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const navigate = useNavigate();
 
   // handle regular input
@@ -96,6 +99,15 @@ const FormAddKaosKaki = () => {
     setForm({
       ...form,
       [name]: value,
+    });
+    // console.log('myForm :' + JSON.stringify(form, null, ' '));
+    // console.log(name + ':' + value);
+  };
+
+  const handleChangeTextArea = (value: string) => {
+    setForm({
+      ...form,
+      keterangan: value,
     });
     // console.log('myForm :' + JSON.stringify(form, null, ' '));
     // console.log(name + ':' + value);
@@ -110,24 +122,14 @@ const FormAddKaosKaki = () => {
     // console.log('myForm :' + JSON.stringify(form, null, ' '));
   };
 
-  // handle file upload input
-  const onDrop = (acceptedFiles: File[]) => {
+  const handleUploadedFile = (acceptedFiles: File[]) => {
+    setUploadedFiles(acceptedFiles);
+
     setForm({
       ...form,
       images: [...form.images, ...acceptedFiles],
     });
   };
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      'image/png': [],
-      'image/jpg': [],
-      'image/jpeg': [],
-      'image/webp': [],
-      'image/svg+xml': [],
-    },
-  });
 
   //handle dynamic input mesin
   const addMesin = () => {
@@ -243,8 +245,25 @@ const FormAddKaosKaki = () => {
             />
           </div>
           <div>
-            <Label htmlFor='keterangan'>Keterangan</Label>
-            <TextArea name='keterangan' value={form.keterangan} onChange={handleSelectChange} placeholder='Masukkan Keterangan' />
+            <Label>Keterangan</Label>
+            <TextArea value={form.keterangan || ''} onChange={handleChangeTextArea} rows={3} placeholder='Masukkan Keterangan' />
+          </div>
+          <div>
+            <Label htmlFor='foto'>Foto</Label>
+            <DropzoneComponent onFilesIploaded={handleUploadedFile} />
+          </div>
+          <div>
+            {uploadedFiles.length > 0 && (
+              <div className='preview'>
+                <Label>Preview Foto</Label>
+                {uploadedFiles.map((file, index) => (
+                  <div key={index}>
+                    {file.name}
+                    <ResponsiveImage src={URL.createObjectURL(file)} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
         <div className='container-button flex flex-row gap-2 justify-end mt-6'>

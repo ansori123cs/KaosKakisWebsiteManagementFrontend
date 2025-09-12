@@ -2,10 +2,13 @@ import ComponentCard from '../../common/ComponentCard';
 import { useDropzone } from 'react-dropzone';
 // import Dropzone from "react-dropzone";
 
-const DropzoneComponent: React.FC = () => {
+interface DropzoneProps {
+  onFilesIploaded: (files: File[]) => void;
+}
+
+const DropzoneComponent: React.FC<DropzoneProps> = ({ onFilesIploaded }) => {
   const onDrop = (acceptedFiles: File[]) => {
-    console.log('Files dropped:', acceptedFiles);
-    // Handle file uploads here
+    onFilesIploaded(acceptedFiles);
   };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -20,7 +23,7 @@ const DropzoneComponent: React.FC = () => {
   return (
     <ComponentCard title='Dropzone'>
       <div className='transition border border-gray-300 border-dashed cursor-pointer dark:hover:border-brand-500 dark:border-gray-700 rounded-xl hover:border-brand-500'>
-        <form
+        <div
           {...getRootProps()}
           className={`dropzone rounded-xl   border-dashed border-gray-300 p-7 lg:p-10
         ${isDragActive ? 'border-brand-500 bg-gray-100 dark:bg-gray-800' : 'border-gray-300 bg-gray-50 dark:border-gray-700 dark:bg-gray-900'}
@@ -51,7 +54,7 @@ const DropzoneComponent: React.FC = () => {
 
             <span className='font-medium underline text-theme-sm text-brand-500'>Browse File</span>
           </div>
-        </form>
+        </div>
       </div>
     </ComponentCard>
   );
