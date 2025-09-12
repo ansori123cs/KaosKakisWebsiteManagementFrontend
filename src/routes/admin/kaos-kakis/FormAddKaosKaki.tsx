@@ -2,7 +2,6 @@ import { useState } from 'react';
 import ComponentCard from '../../../components/common/ComponentCard';
 import { useNavigate } from 'react-router';
 import Loader from '../../../components/ui/loader/Loader';
-import { useDropzone } from 'react-dropzone';
 import Swal from 'sweetalert2';
 import Label from '../../../components/form/Label';
 import Input from '../../../components/form/input/InputField';
@@ -190,9 +189,11 @@ const FormAddKaosKaki = () => {
         formData.append('images', file);
       });
 
+      let array: Number[] = [];
       form.kode_mesin.forEach((id, idx) => {
-        formData.append(`kode_mesin[${idx}]`, String(id));
+        array.push(id);
       });
+      formData.append(`kode_mesin[]`, JSON.stringify(array));
 
       formData.append('kaos_kaki_variasi', JSON.stringify(form.kaos_kaki_variasi));
       const plainObject: Record<string, any> = {};
@@ -223,7 +224,7 @@ const FormAddKaosKaki = () => {
   return (
     <ComponentCard title='Form Kaos Kaki Baru Baru'>
       <div className='container-form'>
-        <div className='space-y-6'>
+        <div className='space-y-4'>
           <div>
             <Label htmlFor='nama_kaos'>Nama Kaos Kaki</Label>
             <Input type='text' id='nama_kaos' name='nama_kaos' value={form.nama_kaos} onChange={handleChange} placeholder='Masukkan Nama Kaos Kaki' />
@@ -255,37 +256,10 @@ const FormAddKaosKaki = () => {
             <TextArea value={form.keterangan || ''} onChange={handleChangeTextArea} rows={3} placeholder='Masukkan Keterangan' />
           </div>
           <div>
-            <div className='grid grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
-              <div>
-                <DropzoneComponent label='Upload Foto' onFilesIploaded={handleUploadedFile} />
-              </div>
-              <div>
-                <Label>Preview Foto</Label>
-                {uploadedFiles.length > 0 && (
-                  <div className='grid grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
-                    {uploadedFiles.map((file, index) => (
-                      <div key={index} className='flex flex-col items-center space-y-2' onClick={() => setSelectedImage(URL.createObjectURL(file))}>
-                        <ResponsiveImage src={URL.createObjectURL(file)} alt={file.name} className='w-32 h-32 object-cover rounded border' />
-                        <span className='text-xs text-gray-600 truncate w-32 text-center'>{file.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-            {/* Modal Preview */}
-            {selectedImage && (
-              <div className='fixed inset-0 bg-black/80 flex items-center justify-center z-99999999 ' onClick={() => setSelectedImage(null)}>
-                <img src={selectedImage} alt='preview besar' className='max-w-[90%] max-h-[90%] rounded-lg shadow-lg' />
-              </div>
-            )}
-          </div>
-          <div>
-            <Label>Tambahkan Mesin</Label>
+            <Label>Jenis Mesin</Label>
             {form.kode_mesin.map((val, idx) => (
               <div key={idx} className='flex gap-2 mb-2'>
-                <Select options={variasiMesin} placeholder='Select Option' onChange={(_, value) => updateMesin(idx, value)} className='dark:bg-dark-900' />
-
+                <Select options={variasiMesin} placeholder='Pilih Jenis Mesin' onChange={(_, value) => updateMesin(idx, value)} className='dark:bg-dark-900' />
                 <Button size='sm' variant='danger' onClick={() => removeMesin(idx)} startIcon={<Trash size={20} />}>
                   Hapus
                 </Button>
@@ -294,6 +268,33 @@ const FormAddKaosKaki = () => {
             <Button size='sm' variant='primary' onClick={addMesin} startIcon={<Plus size={20} />}>
               Tambah Mesin
             </Button>
+          </div>
+          <div>
+            <div className='grid grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
+              <div>
+                <DropzoneComponent label='Upload Foto' onFilesIploaded={handleUploadedFile} />
+              </div>
+              <div>
+                <ComponentCard title='Preview Foto'>
+                  {uploadedFiles.length > 0 && (
+                    <div className='grid grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
+                      {uploadedFiles.map((file, index) => (
+                        <div key={index} className='flex flex-col items-center space-y-2' onClick={() => setSelectedImage(URL.createObjectURL(file))}>
+                          <ResponsiveImage src={URL.createObjectURL(file)} alt={file.name} className='w-32 h-32 object-cover rounded border' />
+                          <span className='text-xs text-gray-600 truncate w-32 text-center'>{file.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </ComponentCard>
+              </div>
+            </div>
+            {/* Modal Preview */}
+            {selectedImage && (
+              <div className='fixed inset-0 bg-black/80 flex items-center justify-center z-99999999 ' onClick={() => setSelectedImage(null)}>
+                <img src={selectedImage} alt='preview besar' className='max-w-[90%] max-h-[90%] rounded-lg shadow-lg' />
+              </div>
+            )}
           </div>
         </div>
         <div className='container-button flex flex-row gap-2 justify-end mt-6'>
