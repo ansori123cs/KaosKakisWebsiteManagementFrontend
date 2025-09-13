@@ -3,6 +3,8 @@ import ComponentCard from '../../../components/common/ComponentCard';
 import { useParams } from 'react-router';
 import Loader from '../../../components/ui/loader/Loader';
 import Label from '../../../components/form/Label';
+import ResponsiveImage from '../../../components/ui/images/ResponsiveImage';
+import Carousel from '../../../components/ui/images/Carousel';
 
 interface KaosKaki {
   id: number;
@@ -72,7 +74,7 @@ const DetailKaosKaki = () => {
   return (
     <ComponentCard title='Detail Kaos Kaki'>
       <div className='container-detail'>
-        <div className='grid grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
+        <div className='grid mb-2 grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
           <div>
             <Label>Nama Kaos Kaki</Label>
             <div className='border border-gray-500 rounded-2xl p-3'>
@@ -86,19 +88,51 @@ const DetailKaosKaki = () => {
             </div>
           </div>
         </div>
-        <div className='grid grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
+        <div className='grid mb-2 grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
           <div>
-            <Label>Nama Kaos Kaki</Label>
+            <Label>Jenis Bahan</Label>
             <div className='border border-gray-500 rounded-2xl p-3'>
-              <p className='mb-1.5 text-base font-medium text-gray-700 dark:text-gray-400'>{responseData?.nama}</p>
+              <p className='mb-1.5 text-base font-medium text-gray-700 dark:text-gray-400'>
+                {responseData?.jenis_bahan?.kode_bahan} - {responseData?.jenis_bahan?.nama}
+              </p>
             </div>
           </div>
           <div>
-            <Label>Kode Kaos Kaki</Label>
+            <Label>Tanggal Pesanan Terakhir</Label>
             <div className='border border-gray-500 rounded-2xl p-3'>
-              <p className='mb-1.5 text-base font-medium text-gray-700 dark:text-gray-400'>{responseData?.kode_kaos_kaki}</p>
+              <p className='mb-1.5 text-base font-medium text-gray-700 dark:text-gray-400'>{String(responseData?.last_order_date)}</p>
             </div>
           </div>
+        </div>
+        <div className='grid mb-2 grid-cols-1 gap-5 sm:grid-cols-1 xl:grid-cols-2'>
+          <div>
+            <Label>Keterangan</Label>
+            <div className='border border-gray-500 rounded-2xl p-3'>
+              <p className='mb-1.5 text-base font-medium text-gray-700 dark:text-gray-400'>{responseData?.keterangan}</p>
+            </div>
+          </div>
+          <div>
+            <Label>Mesin</Label>
+            <div className='border border-gray-500 rounded-2xl p-3'>
+              {responseData?.mesin.map((itm) => (
+                <p className='mb-1.5 text-base font-medium text-gray-700 dark:text-gray-400'>- {itm}</p>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className='mb-2'>
+          <Carousel
+            autoSlide={false}
+            autoSlideInterval={2000}
+            slides={responseData?.images.map((itm) => (
+              <div>
+                <Label>{itm}</Label>
+                <div className='border border-gray-500 rounded-2xl p-3'>
+                  <ResponsiveImage></ResponsiveImage>
+                </div>
+              </div>
+            ))}
+          />
         </div>
       </div>
     </ComponentCard>
