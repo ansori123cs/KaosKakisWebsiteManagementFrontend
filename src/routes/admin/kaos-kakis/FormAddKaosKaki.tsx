@@ -44,24 +44,24 @@ const variasiMesin = [
     value: '3',
   },
 ];
-const variasiKaos = [
-  {
-    label: '1/2 Telapak hitam',
-    value: '1',
-  },
-  {
-    label: 'Telapak Hitam Full',
-    value: '2',
-  },
-  {
-    label: 'Hitam Polos',
-    value: '3',
-  },
-  {
-    label: 'Putih Polos',
-    value: '4',
-  },
-];
+// const variasiKaos = [
+//   {
+//     label: '1/2 Telapak hitam',
+//     value: '1',
+//   },
+//   {
+//     label: 'Telapak Hitam Full',
+//     value: '2',
+//   },
+//   {
+//     label: 'Hitam Polos',
+//     value: '3',
+//   },
+//   {
+//     label: 'Putih Polos',
+//     value: '4',
+//   },
+// ];
 const variasiJenisBahan = [
   {
     label: 'Nilon',
@@ -155,24 +155,24 @@ const FormAddKaosKaki = () => {
     }));
   };
 
-  //handle dynamic input variasi kaos kaki
-  const addVariasi = () => {
-    setForm({
-      ...form,
-      kaos_kaki_variasi: [...form.kaos_kaki_variasi, { warna: 0, ukuran: 0, jumlah: 0 }],
-    });
-  };
-  const updateVariasi = (index: number, field: keyof IVariasiKaos, value: number) => {
-    const updated = [...form.kaos_kaki_variasi];
-    updated[index][field] = value;
-    setForm({ ...form, kaos_kaki_variasi: updated });
-  };
-  const removeVariasi = (index: number) => {
-    setForm({
-      ...form,
-      kaos_kaki_variasi: form.kaos_kaki_variasi.filter((_, i) => i !== index),
-    });
-  };
+  // //handle dynamic input variasi kaos kaki
+  // const addVariasi = () => {
+  //   setForm({
+  //     ...form,
+  //     kaos_kaki_variasi: [...form.kaos_kaki_variasi, { warna: 0, ukuran: 0, jumlah: 0 }],
+  //   });
+  // };
+  // const updateVariasi = (index: number, field: keyof IVariasiKaos, value: number) => {
+  //   const updated = [...form.kaos_kaki_variasi];
+  //   updated[index][field] = value;
+  //   setForm({ ...form, kaos_kaki_variasi: updated });
+  // };
+  // const removeVariasi = (index: number) => {
+  //   setForm({
+  //     ...form,
+  //     kaos_kaki_variasi: form.kaos_kaki_variasi.filter((_, i) => i !== index),
+  //   });
+  // };
 
   //handle submit form
   const handleSubmit = async () => {
@@ -190,7 +190,7 @@ const FormAddKaosKaki = () => {
       });
 
       let array: Number[] = [];
-      form.kode_mesin.forEach((id, idx) => {
+      form.kode_mesin.forEach((id) => {
         array.push(id);
       });
       formData.append(`kode_mesin[]`, JSON.stringify(array));
@@ -259,7 +259,7 @@ const FormAddKaosKaki = () => {
             <Label>Jenis Mesin</Label>
             {form.kode_mesin.map((val, idx) => (
               <div key={idx} className='flex gap-2 mb-2'>
-                <Select options={variasiMesin} placeholder='Pilih Jenis Mesin' onChange={(_, value) => updateMesin(idx, value)} className='dark:bg-dark-900' />
+                <Select options={variasiMesin} placeholder='Pilih Jenis Mesin' name={String(val)} onChange={(_, value) => updateMesin(idx, value)} className='dark:bg-dark-900' />
                 <Button size='sm' variant='danger' onClick={() => removeMesin(idx)} startIcon={<Trash size={20} />}>
                   Hapus
                 </Button>

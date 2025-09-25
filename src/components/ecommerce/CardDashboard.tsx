@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { ArrowDownIcon, ArrowUpIcon, BoxIconLine, GroupIcon } from '../../icons';
 import Badge from '../ui/badge/Badge';
 import { ArrowDown, ArrowUp } from 'lucide-react';
 
