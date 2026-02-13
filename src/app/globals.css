@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-persebaya-primary: #005a2c;
+  --color-persebaya-primary-hover: #00a24c;
+  --color-persebaya-accent: #ffd700;
+  --color-persebaya-error: #ff2a2a;
+  --color-persebaya-link: #0000ff;
+  --color-persebaya-secondary: #e5e5e5;
+  --color-persebaya-text: #1a1a1a;
+  --color-persebaya-bg: #f2f4f7;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
