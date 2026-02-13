@@ -1,13 +1,12 @@
-# Persebaya-ID Clone
+# Website Management Kaos Kaki Frontend
 
-Website clone dari *Persebaya ID* dengan fokus pada halaman ticketing dan tampilan frontend interaktif.
+Website untuk management produk berupa kaos kaki
 
-**Demo Live:** https://persebaya-id-clone.vercel.app :contentReference[oaicite:1]{index=1}
+**Demo Live:** https://kaos-kaki-management.vercel.app :contentReference[oaicite:1]{index=1}
 
 ## Tentang Project
 
-Persebaya-ID Clone adalah proyek frontend yang dibuat sebagai klon tampilan (UI) situs *Persebaya ID* — khususnya untuk bagian ticketing dan informasi klub sepak bola Persebaya Surabaya.  
-Proyek ini dibangun menggunakan:
+Website Management Kaos Kaki
 
 - **Next.js (React Framework)**
 - **TypeScript**
