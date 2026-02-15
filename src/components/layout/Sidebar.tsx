@@ -205,7 +205,7 @@ const Sidebar: React.FC = () => {
           {isOpen && <h3 className="font-bold text-gray-900">Menu</h3>}
           {isMobile && isOpen && (
             <Button
-              variant="ghost"
+              variant="warning"
               size="sm"
               onClick={closeSidebar}
               className="p-1"

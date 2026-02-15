@@ -48,14 +48,6 @@ export default function LoginPage() {
         <CardContent className="pt-6">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-40 h-40 rounded-2xl my-4 ">
-              <Image
-                src="/logo-small.png"
-                width={800}
-                height={800}
-                alt="logo-persebaya"
-              />
-            </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Login</h1>
           </div>
 

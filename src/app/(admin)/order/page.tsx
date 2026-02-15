@@ -120,7 +120,7 @@ export default function UsersPage() {
                       </span>
                     </td>
                     <td className="py-3 px-4 flex gap-2">
-                      <Button variant="ghost" size="sm">
+                      <Button variant="warning" size="sm">
                         Edit
                       </Button>
                       <Button variant="danger" size="sm">

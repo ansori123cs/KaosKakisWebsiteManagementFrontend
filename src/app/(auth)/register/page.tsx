@@ -114,14 +114,6 @@ export default function RegisterPage() {
         <CardContent className="pt-6">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-40 h-40 rounded-2xl my-4 ">
-              <Image
-                src="/logo-small.png"
-                width={800}
-                height={800}
-                alt="logo-persebaya"
-              />
-            </div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
               Registrasi
             </h1>
@@ -168,7 +160,7 @@ export default function RegisterPage() {
                       htmlFor="nik"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      NIK
+                      Jabatan
                     </label>
                     <div className="relative">
                       <Dock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
@@ -176,7 +168,7 @@ export default function RegisterPage() {
                         id="nik"
                         name="nik"
                         type="text"
-                        placeholder="3572456653766352"
+                        placeholder="admin mesin"
                         value={formData.nik}
                         onChange={handleChange}
                         className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-persebaya-primary focus:border-transparent"
