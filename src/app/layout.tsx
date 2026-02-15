@@ -1,26 +1,25 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata, Viewport } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  variable: '--font-geist-mono',
+  subsets: ['latin'],
 });
 
 export const metadata: Metadata = {
-  title: "FaiSal - Modern Dashboard",
-  description:
-    "A modern dashboard template with Next.js, TypeScript, and Tailwind CSS",
-  authors: [{ name: "FaiSal Team" }],
+  title: 'Kaos Kaki Management Dashboard',
+  description: 'A modern dashboard template with Next.js, TypeScript, and Tailwind CSS',
+  authors: [{ name: 'Ansori' }],
 };
 
 export const viewport: Viewport = {
-  width: "device-width",
+  width: 'device-width',
   initialScale: 1,
 };
 
@@ -30,12 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
-      >
-        {children}
-      </body>
+    <html lang='en'>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}>{children}</body>
     </html>
   );
 }
