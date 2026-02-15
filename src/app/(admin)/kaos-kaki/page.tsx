@@ -95,7 +95,7 @@ export default function KaosKakiPage() {
             <h2 className='text-lg font-semibold text-gray-900'>Daftar Kaos Kaki</h2>
             <div className='flex flex-row gap-2'>
               <input type='text' placeholder='Cari nama kaos kaki...' className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64' onChange={(e) => setSearch(e.target.value)} />
-              <Button variant='primary' size='sm' onClick={handleSearch}>
+              <Button variant='primary' className='cursor-pointer' size='sm' onClick={handleSearch}>
                 Cari..
               </Button>
             </div>
