@@ -1,5 +1,9 @@
+'use client';
+
 import Button from '@/components/ui/Button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/Card';
+import Link from 'next/link';
+import { useState } from 'react';
 
 const KaosKakiList = [
   {
@@ -65,6 +69,11 @@ const KaosKakiList = [
 ];
 
 export default function KaosKakiPage() {
+  const [search, setSearch] = useState('');
+
+  const handleSearch = () => {
+    console.log(search);
+  };
   return (
     <Card className='space-y-8 p-6'>
       <CardHeader>
@@ -73,7 +82,11 @@ export default function KaosKakiPage() {
             <h1 className='text-3xl font-bold text-gray-900'>Kaos Kaki</h1>
             <p className='text-gray-600'>Kelola dan lihat semua daftar kaos kaki sekolah/uniform di sistem.</p>
           </div>
-          <Button variant='primary'>Tambah Kaos Kaki</Button>
+          <Link href='/kaos-kaki/add'>
+            <Button variant='primary' className='cursor-pointer'>
+              Tambah Kaos Kaki
+            </Button>
+          </Link>
         </div>
       </CardHeader>
       <CardContent>
@@ -81,8 +94,8 @@ export default function KaosKakiPage() {
           <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
             <h2 className='text-lg font-semibold text-gray-900'>Daftar Kaos Kaki</h2>
             <div className='flex flex-row gap-2'>
-              <input type='text' placeholder='Cari nama kaos kaki...' className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64' />
-              <Button variant='primary' size='sm'>
+              <input type='text' placeholder='Cari nama kaos kaki...' className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-64' onChange={(e) => setSearch(e.target.value)} />
+              <Button variant='primary' size='sm' onClick={handleSearch}>
                 Cari..
               </Button>
             </div>
@@ -113,9 +126,16 @@ export default function KaosKakiPage() {
                       </td>
                       <td className='py-3 px-4 text-gray-600'>{item.bahan}</td>
                       <td className='py-3 px-4 flex gap-2'>
-                        <Button variant='warning' size='sm'>
-                          Edit
-                        </Button>
+                        <Link
+                          href={{
+                            pathname: '/kaos-kaki/edit',
+                            query: { id: item.id },
+                          }}
+                        >
+                          <Button variant='warning' size='sm'>
+                            Edit
+                          </Button>
+                        </Link>
                         <Button variant='danger' size='sm'>
                           Hapus
                         </Button>
