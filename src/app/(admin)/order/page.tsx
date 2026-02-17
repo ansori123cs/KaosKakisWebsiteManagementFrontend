@@ -119,6 +119,10 @@ const OrdersPage = () => {
     console.log(filter);
   };
 
+  const handleDetail = (id: string) => {
+    router.push(`/order/detail/${id}`);
+  };
+
   const handleEdit = (id: string) => {
     router.push(`kaos-kaki/edit/${id}`);
   };
@@ -150,7 +154,7 @@ const OrdersPage = () => {
   };
 
   return (
-    <Card className='space-y-8 p-6'>
+    <Card className='space-y-8'>
       <CardHeader>
         <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
           <div className='space-y-2'>
@@ -227,6 +231,16 @@ const OrdersPage = () => {
 
                       <td className='py-3 px-4'>
                         <div className='flex flex-col sm:flex-row gap-2'>
+                          <Button
+                            variant='ghost'
+                            className='cursor-pointer'
+                            size='sm'
+                            onClick={() => {
+                              handleDetail(item.id);
+                            }}
+                          >
+                            Detail
+                          </Button>
                           <Button
                             variant='default'
                             className='cursor-pointer'

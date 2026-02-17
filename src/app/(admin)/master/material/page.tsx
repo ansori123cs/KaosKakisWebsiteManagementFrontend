@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/Card';
-import { PlusIcon, Search } from 'lucide-react';
+import { PlusIcon, Search, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Swal from 'sweetalert2';
@@ -212,8 +212,8 @@ const MasterMaterialPage = () => {
           <div className='relative z-10 w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 animate-in fade-in zoom-in-95'>
             <div className='flex justify-between items-center mb-4'>
               <h2 className='text-lg font-semibold'>Preview Data</h2>
-              <button onClick={() => setIsPreviewOpen(false)} className='text-gray-500 hover:text-black text-xl'>
-                ✕
+              <button onClick={() => setIsPreviewOpen(false)} className='text-gray-500 hover:text-black text-xl cursor-pointer'>
+                <X className='h-5 w-5' />
               </button>
             </div>
 
@@ -232,11 +232,11 @@ const MasterMaterialPage = () => {
             </div>
 
             <div className='flex justify-end mt-6 gap-3'>
-              <Button variant='secondary' onClick={() => setIsPreviewOpen(false)}>
+              <Button variant='secondary' className='cursor-pointer' onClick={() => setIsPreviewOpen(false)}>
                 Tutup
               </Button>
 
-              <Button variant='default' onClick={handleSubmit}>
+              <Button variant='default' className='cursor-pointer' onClick={handleSubmit}>
                 Simpan
               </Button>
             </div>

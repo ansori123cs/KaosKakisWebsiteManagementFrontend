@@ -143,7 +143,7 @@ const CreateKaosKakiPage = () => {
 
   return (
     <div className='min-h-screen w-full bg-[#F2F4F7] p-6'>
-      <Card className='w-full bg-white rounded-2xl p-3'>
+      <Card className='w-full bg-white rounded-2xl'>
         <CardHeader className=''>
           <Button variant='secondary' onClick={handleBack} className='w-28 mb-3 cursor-pointer'>
             <ChevronDown className='w-5 h-5 rotate-90' /> Kembali

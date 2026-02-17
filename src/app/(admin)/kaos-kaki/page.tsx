@@ -127,7 +127,7 @@ const KaosKakiPage = () => {
   };
 
   return (
-    <Card className='space-y-8 p-6'>
+    <Card className='space-y-8'>
       <CardHeader>
         <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
           <div className='space-y-2'>
