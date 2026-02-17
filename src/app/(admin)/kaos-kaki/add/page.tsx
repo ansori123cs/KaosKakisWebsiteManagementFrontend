@@ -278,8 +278,8 @@ const CreateKaosKakiPage = () => {
           <div className='relative z-10 max-w-7xl w-full px-4 flex items-center justify-center'>
             {/* Prev Button */}
             {preview.length > 1 && (
-              <button type='button' onClick={() => setSelectedIndex((selectedIndex - 1 + preview.length) % preview.length)} className='absolute left-4 text-white text-3xl cursor-pointer'>
-                <ChevronDown className='w-5 h-5 -rotate-90' />
+              <button type='button' onClick={() => setSelectedIndex((selectedIndex - 1 + preview.length) % preview.length)} className='absolute left-4 text-white text-3xl hover:bg-black/20 rounded-full p-1 cursor-pointer'>
+                <ChevronDown className='w-5 h-5 rotate-90' />
               </button>
             )}
 
@@ -288,14 +288,14 @@ const CreateKaosKakiPage = () => {
 
             {/* Next Button */}
             {preview.length > 1 && (
-              <button type='button' onClick={() => setSelectedIndex((selectedIndex + 1) % preview.length)} className='absolute right-4 text-white text-3xl cursor-pointer'>
-                <ChevronDown className='w-5 h-5 rotate-90' />
+              <button type='button' onClick={() => setSelectedIndex((selectedIndex + 1) % preview.length)} className='absolute right-4 text-white text-3xl cursor-pointer hover:bg-black/20 rounded-full p-1'>
+                <ChevronDown className='w-5 h-5 -rotate-90' />
               </button>
             )}
 
             {/* Close Button */}
-            <button type='button' onClick={() => setSelectedIndex(null)} className='absolute top-2 right-2 text-white text-2xl cursor-pointer hover:bg-black/10 rounded-full p-1'>
-              <X className='w-10 h-10' />
+            <button type='button' onClick={() => setSelectedIndex(null)} className='absolute top-2 right-2 text-white text-2xl cursor-pointer hover:bg-black/10 rounded-full p-1 '>
+              <X className='w-15 h-5' />
             </button>
           </div>
         </div>
