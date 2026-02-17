@@ -12,78 +12,28 @@ import Swal from 'sweetalert2';
 const KaosKakiList = [
   {
     id: 1,
-    nama_kaos: 'smp n 11 surabaya',
-    mesin: ['yaushen', 'ths'],
-    bahan: 'PE 30 s',
+    kode: 'kode-asd-fas',
+    nama: 'PE 30 S',
   },
   {
     id: 2,
-    nama_kaos: 'sma n 5 surabaya',
-    mesin: ['yaushen', 'lonati'],
-    bahan: 'cotton combed 24s',
+    kode: 'kode-asd-fas',
+    nama: 'cotton combed 24s',
   },
   {
     id: 3,
-    nama_kaos: 'sd al hikmah surabaya',
-    mesin: ['ths'],
-    bahan: 'PE 24 s',
-  },
-  {
-    id: 4,
-    nama_kaos: 'smpn 1 sidoarjo',
-    mesin: ['yaushen', 'ths'],
-    bahan: 'cotton combed 30s',
-  },
-  {
-    id: 5,
-    nama_kaos: 'sma muhammadiyah 2 surabaya',
-    mesin: ['lonati'],
-    bahan: 'PE 20 s',
-  },
-  {
-    id: 6,
-    nama_kaos: 'sdn ketabang surabaya',
-    mesin: ['yaushen'],
-    bahan: 'cotton carded 24s',
-  },
-  {
-    id: 7,
-    nama_kaos: 'smp kristen petra 1',
-    mesin: ['ths', 'lonati'],
-    bahan: 'cotton combed 28s',
-  },
-  {
-    id: 8,
-    nama_kaos: 'sma n 2 gresik',
-    mesin: ['yaushen'],
-    bahan: 'PE 30 s',
-  },
-  {
-    id: 9,
-    nama_kaos: 'sd islam terpadu nurul fikri',
-    mesin: ['ths'],
-    bahan: 'cotton combed 20s',
-  },
-  {
-    id: 10,
-    nama_kaos: 'smpn 3 malang',
-    mesin: ['yaushen', 'lonati'],
-    bahan: 'cotton carded 30s',
+    kode: 'kode-asd-fas',
+    nama: 'PE 24 s',
   },
 ];
 
-const selectCategory = [
-  { label: 'Sekolah TK', value: 'TK' },
-  { label: 'Sekolah SD', value: 'SD' },
-  { label: 'Sekolah SMP', value: 'SMP' },
-  { label: 'Sekolah SMA', value: 'SMA' },
-  { label: 'Sekolah CAMPUR', value: 'CAMPUR' },
-  { label: 'UMUM', value: 'UMUM' },
-];
-
-const KaosKakiPage = () => {
+const MasterMaterialPage = () => {
   const [search, setSearch] = useState('');
-  const [filter, setFilter] = useState('');
+  const [nama, setNama] = useState('');
+  const [kode, setKode] = useState('');
+  const [edit, setEdit] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
   const router = useRouter();
 
   const handleSearch = () => {
@@ -91,13 +41,48 @@ const KaosKakiPage = () => {
     console.log(search);
   };
 
-  const handleFilter = () => {
-    //logic filter
-    console.log(filter);
+  const handleSubmit = () => {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, save it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (edit) {
+          console.log('nama : ', nama);
+          console.log('kode : ', kode);
+        } else {
+          //logic save master
+          console.log('nama : ', nama);
+          console.log('kode : ', kode);
+        }
+
+        setIsPreviewOpen(false);
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Your work has been saved',
+          showConfirmButton: false,
+          timer: 1000,
+        });
+      }
+    });
   };
 
   const handleEdit = (id: number) => {
-    router.push(`kaos-kaki/edit/${id}`);
+    setIsPreviewOpen(true);
+    //logic edit, fetch data by id and set to form
+
+    const selectedMaterial = KaosKakiList.find((item) => item.id === id);
+    if (selectedMaterial) {
+      setNama(selectedMaterial.nama);
+      setKode(selectedMaterial.kode);
+      setEdit(true);
+    }
   };
 
   const handleDelete = (id: number) => {
@@ -113,7 +98,7 @@ const KaosKakiPage = () => {
       if (result.isConfirmed) {
         //logic delete
 
-        router.push(`kaos-kaki/delete/${id}`);
+        router.push(`/master/bahan/${id}`);
 
         Swal.fire({
           position: 'top-end',
@@ -131,35 +116,23 @@ const KaosKakiPage = () => {
       <CardHeader>
         <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-4'>
           <div className='space-y-2'>
-            <h1 className='text-3xl font-bold text-gray-900'>Kaos Kaki</h1>
-            <p className='text-gray-600'>Kelola dan lihat semua daftar kaos kaki sekolah/uniform di sistem.</p>
+            <h1 className='text-3xl font-bold text-gray-900'>Master Bahan</h1>
+            <p className='text-gray-600'>Kelola dan lihat semua daftar Bahan</p>
           </div>
-          <Link href='/kaos-kaki/add' className='w-full md:w-auto'>
-            <Button variant='primary' className='w-full md:w-auto cursor-pointer'>
-              Tambah Kaos Kaki <PlusIcon className='ml-2 h-4 w-4' />
-            </Button>
-          </Link>
+          <Button variant='primary' className='w-full md:w-auto cursor-pointer' onClick={() => setIsPreviewOpen(true)}>
+            Tambah Bahan <PlusIcon className='ml-2 h-4 w-4' />
+          </Button>
         </div>
       </CardHeader>
       <CardContent>
         <Card className='shadow-xl'>
-          <h2 className=' p-2 text-lg font-semibold text-gray-900'>Daftar Kaos Kaki</h2>
+          <h2 className=' p-2 text-lg font-semibold text-gray-900'>Daftar Bahan</h2>
           <CardHeader className='flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 pb-2'>
-            <div className='flex flex-col sm:flex-row gap-2 w-full lg:w-auto'>
-              {/* Filter */}
-              <div className='w-full sm:w-64'>
-                <Select instanceId='selectFilter' isMulti={false} isSearchable options={selectCategory} onChange={(e) => setFilter(e?.value ?? '')} placeholder='Pilih Filter...' />
-              </div>
-
-              <Button variant='primary' size='sm' onClick={handleFilter} className='w-full sm:w-auto cursor-pointer'>
-                Filter.. <ListFilter className='ml-2 h-4 w-4' />
-              </Button>
-            </div>
             {/* Search */}
             <div className='flex flex-col sm:flex-row gap-2 w-full lg:w-auto'>
               <input
                 type='text'
-                placeholder='Cari nama kaos kaki...'
+                placeholder='Cari Bahan...'
                 className='px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-64'
                 onChange={(e) => {
                   setSearch(e.target.value);
@@ -176,26 +149,17 @@ const KaosKakiPage = () => {
               <table className='w-full min-w-175'>
                 <thead>
                   <tr className='border-b border-gray-200 bg-gray-50'>
-                    <th className='text-left py-3 px-4 text-gray-700 font-semibold'>Nama Kaos</th>
-                    <th className='text-left py-3 px-4 text-gray-700 font-semibold'>Mesin</th>
-                    <th className='text-left py-3 px-4 text-gray-700 font-semibold'>Bahan</th>
+                    <th className='text-left py-3 px-4 text-gray-700 font-semibold'>No</th>
+                    <th className='text-left py-3 px-4 text-gray-700 font-semibold'>Nama Bahan</th>
+                    <th className='text-left py-3 px-4 text-gray-700 font-semibold'>Kode</th>
                     <th className='text-left py-3 px-4 text-gray-700 font-semibold'>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {KaosKakiList.map((item) => (
                     <tr key={item.id} className='border-b border-gray-200 hover:bg-gray-50'>
-                      <td className='py-3 px-4 text-gray-900 font-medium'>{item.nama_kaos}</td>
-                      <td className='py-3 px-4 text-gray-600'>
-                        <div className='flex flex-wrap gap-1'>
-                          {item.mesin.map((m, idx) => (
-                            <span key={idx} className='px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium'>
-                              {m}
-                            </span>
-                          ))}
-                        </div>
-                      </td>
-                      <td className='py-3 px-4 text-gray-600'>{item.bahan}</td>
+                      <td className='py-3 px-4 text-gray-900 font-medium'>{item.nama}</td>
+                      <td className='py-3 px-4 text-gray-600'>{item.kode}</td>
                       <td className='py-3 px-4'>
                         <div className='flex flex-col sm:flex-row gap-2'>
                           <Button
@@ -238,7 +202,48 @@ const KaosKakiPage = () => {
           </CardFooter>
         </Card>
       </CardContent>
+
+      {isPreviewOpen && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4'>
+          {/* Overlay Click Close */}
+          <div className='absolute inset-0' onClick={() => setIsPreviewOpen(false)} />
+
+          {/* Modal Content */}
+          <div className='relative z-10 w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6 animate-in fade-in zoom-in-95'>
+            <div className='flex justify-between items-center mb-4'>
+              <h2 className='text-lg font-semibold'>Preview Data</h2>
+              <button onClick={() => setIsPreviewOpen(false)} className='text-gray-500 hover:text-black text-xl'>
+                ✕
+              </button>
+            </div>
+
+            <div className='space-y-3 text-sm'>
+              <div>
+                <label className='block mb-2 font-medium'>Nama</label>
+                <input type='text' value={nama} onChange={(e) => setNama(e.target.value)} className='w-full border rounded-lg px-4 py-2' />
+              </div>
+
+              <div>
+                <label className='block mb-2 font-medium'>Kode</label>
+                <input type='text' value={kode} onChange={(e) => setKode(e.target.value)} className='w-full border rounded-lg px-4 py-2' />
+              </div>
+
+              {/* Tambahkan field lain jika ada */}
+            </div>
+
+            <div className='flex justify-end mt-6 gap-3'>
+              <Button variant='secondary' onClick={() => setIsPreviewOpen(false)}>
+                Tutup
+              </Button>
+
+              <Button variant='primary' onClick={handleSubmit}>
+                Simpan
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </Card>
   );
 };
-export default KaosKakiPage;
+export default MasterMaterialPage;

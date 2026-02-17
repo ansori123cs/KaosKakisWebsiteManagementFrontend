@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
-import { ChevronDown, X } from 'lucide-react';
+import { Check, ChevronDown, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Select from 'react-select';
 
@@ -78,13 +78,14 @@ const selectBahan: SelectType[] = [
   },
 ];
 
-export default function CreateKaosKakiPage() {
+const CreateKaosKakiPage = () => {
   const [nama, setNama] = useState('');
   const [mesin, setMesin] = useState<string[]>([]);
   const [bahan, setBahan] = useState('');
   const [variasi, setVariasi] = useState<VariasiType[]>([{ warna: '', ukuran: '' }]);
   const [foto, setFoto] = useState<File[]>([]);
   const [preview, setPreview] = useState<string[]>([]);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const router = useRouter();
 
   // Handle Variasi Change
@@ -179,6 +180,7 @@ export default function CreateKaosKakiPage() {
               <Select
                 instanceId='selectBahan'
                 isMulti={false}
+                isSearchable={true}
                 options={selectBahan}
                 onChange={(e) => {
                   setBahan(e?.value ?? '');
@@ -192,30 +194,45 @@ export default function CreateKaosKakiPage() {
               <label className='block mb-2 font-medium'>Variasi</label>
 
               {variasi.map((item, index) => (
-                <div key={index} className='flex gap-4 mb-3 items-center '>
-                  <Select
-                    instanceId={`selectWarna-${index}`}
-                    value={{ label: selectVariasiWarna.find((e) => e.value === item.warna)?.label ?? 'Pilih Warna...', value: item.warna }}
-                    isMulti={false}
-                    options={selectVariasiWarna}
-                    onChange={(e) => handleVariasiChange(index, 'warna', e?.value ?? '')}
-                    placeholder='Pilih Warna...'
-                    className='flex-1 px-4 py-2'
-                  />
+                <div key={index} className='flex flex-col md:flex-row gap-3 md:gap-4 mb-4 md:items-center'>
+                  {/* Select Warna */}
+                  <div className='w-full md:flex-1'>
+                    <Select
+                      instanceId={`selectWarna-${index}`}
+                      value={{
+                        label: selectVariasiWarna.find((e) => e.value === item.warna)?.label ?? 'Pilih Warna...',
+                        value: item.warna,
+                      }}
+                      isMulti={false}
+                      isSearchable={true}
+                      options={selectVariasiWarna}
+                      onChange={(e) => handleVariasiChange(index, 'warna', e?.value ?? '')}
+                      placeholder='Pilih Warna...'
+                    />
+                  </div>
 
-                  <Select
-                    instanceId={`selectUkuran-${index}`}
-                    value={{ label: selectVariasiUkuran.find((e) => e.value === item.ukuran)?.label ?? 'Pilih Ukuran...', value: item.ukuran }}
-                    isMulti={false}
-                    options={selectVariasiUkuran}
-                    onChange={(e) => handleVariasiChange(index, 'ukuran', e?.value ?? '')}
-                    placeholder='Pilih Ukuran...'
-                    className='flex-1 px-4 py-2'
-                  />
+                  {/* Select Ukuran */}
+                  <div className='w-full md:flex-1'>
+                    <Select
+                      instanceId={`selectUkuran-${index}`}
+                      value={{
+                        label: selectVariasiUkuran.find((e) => e.value === item.ukuran)?.label ?? 'Pilih Ukuran...',
+                        value: item.ukuran,
+                      }}
+                      isMulti={false}
+                      isSearchable={true}
+                      options={selectVariasiUkuran}
+                      onChange={(e) => handleVariasiChange(index, 'ukuran', e?.value ?? '')}
+                      placeholder='Pilih Ukuran...'
+                    />
+                  </div>
 
-                  <button type='button' onClick={() => hapusVariasi(index)} className='cursor-pointer'>
-                    <X className='w-5 h-5 text-red-500 cursor-pointer hover:bg-black/10' />
-                  </button>
+                  {/* Tombol Hapus */}
+                  <div className='flex justify-end md:justify-center'>
+                    <button type='button' onClick={() => hapusVariasi(index)} className='p-2 rounded-lg cursor-pointer hover:bg-red-50 transition'>
+                      <X className='w-5 h-5 text-red-500' />
+                    </button>
+                  </div>
                 </div>
               ))}
 
@@ -230,13 +247,14 @@ export default function CreateKaosKakiPage() {
             <div className='border p-3 rounded-lg shadow-sm'>
               <label className='block mb-2 font-medium'>Upload Foto</label>
 
-              <input type='file' multiple onChange={handleFotoChange} className='mb-4 p-3 bg-blue-500 hover:bg-blue-500/70 text-white text-base text-center rounded-lg h-12 cursor-pointer ' />
+              <input type='file' multiple onChange={handleFotoChange} className='mb-4 p-3 bg-blue-500 hover:bg-blue-500/70 text-white text-base text-center rounded-lg w-full h-12 cursor-pointer ' />
 
               <div className='grid grid-cols-3 gap-4'>
                 {preview.map((src, index) => (
-                  <div key={index} className='relative'>
-                    <Image src={src} alt='preview' width={200} height={200} className='rounded-lg object-cover' />
-                    <button type='button' onClick={() => hapusFoto(index)} className='absolute top-2 right-2 bg-white rounded-full p-1'>
+                  <div key={index} className='relative group border rounded-lg overflow-hidden p-2 shadow-lg justify-center items-center flex'>
+                    <Image src={src} alt='preview' width={200} height={200} onClick={() => setSelectedIndex(index)} className='rounded-lg object-cover cursor-pointer' />
+
+                    <button type='button' onClick={() => hapusFoto(index)} className='absolute top-2 right-2 bg-white rounded-full p-1 shadow cursor-pointer hover:bg-black/10 '>
                       <X className='w-4 h-4 text-red-500' />
                     </button>
                   </div>
@@ -245,12 +263,45 @@ export default function CreateKaosKakiPage() {
             </div>
             <div className='flex justify-end'>
               <Button type='submit' variant='primary' className='cursor-pointer'>
-                Simpan Produk
+                Simpan <Check className='w-4 h-4 ml-2' />
               </Button>
             </div>
           </form>
         </CardContent>
       </Card>
+      {selectedIndex !== null && (
+        <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/70'>
+          {/* Close Area */}
+          <div className='absolute inset-0' onClick={() => setSelectedIndex(null)} />
+
+          {/* Content */}
+          <div className='relative z-10 max-w-7xl w-full px-4 flex items-center justify-center'>
+            {/* Prev Button */}
+            {preview.length > 1 && (
+              <button type='button' onClick={() => setSelectedIndex((selectedIndex - 1 + preview.length) % preview.length)} className='absolute left-4 text-white text-3xl cursor-pointer'>
+                <ChevronDown className='w-5 h-5 -rotate-90' />
+              </button>
+            )}
+
+            {/* Image */}
+            <Image src={preview[selectedIndex]} alt='preview-large' width={1000} height={1000} className='rounded-xl object-contain max-h-[80vh]' />
+
+            {/* Next Button */}
+            {preview.length > 1 && (
+              <button type='button' onClick={() => setSelectedIndex((selectedIndex + 1) % preview.length)} className='absolute right-4 text-white text-3xl cursor-pointer'>
+                <ChevronDown className='w-5 h-5 rotate-90' />
+              </button>
+            )}
+
+            {/* Close Button */}
+            <button type='button' onClick={() => setSelectedIndex(null)} className='absolute top-2 right-2 text-white text-2xl cursor-pointer hover:bg-black/10 rounded-full p-1'>
+              <X className='w-10 h-10' />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default CreateKaosKakiPage;

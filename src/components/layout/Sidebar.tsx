@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
-import { LayoutDashboard, BarChart3, Users, Settings, HelpCircle, ChevronRight, X, Ruler, PaintBucket, WashingMachine, CirclePile } from 'lucide-react';
+import { LayoutDashboard, BarChart3, Users, Settings, HelpCircle, ChevronRight, X, Ruler, PaintBucket, WashingMachine, CirclePile, Blocks } from 'lucide-react';
 import { useSidebarStore } from '@/stores/sidebarStore';
 import { Button } from '@/components/ui/button';
 
@@ -36,7 +36,7 @@ const navItems: NavItem[] = [
   {
     label: 'Master Data',
     href: '',
-    icon: <Settings className='w-5 h-5' />,
+    icon: <Blocks className='w-5 h-5' />,
     submenu: [
       {
         label: 'Ukuran',
@@ -63,7 +63,7 @@ const navItems: NavItem[] = [
   {
     label: 'Stok',
     href: '/stock',
-    icon: <Settings className='w-5 h-5' />,
+    icon: <CirclePile className='w-5 h-5' />,
   },
   {
     label: 'Akun',
