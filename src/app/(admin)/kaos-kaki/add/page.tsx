@@ -4,17 +4,83 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Button from '@/components/ui/Button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
-import { X } from 'lucide-react';
+import { ChevronDown, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Select from 'react-select';
 
 type VariasiType = {
   warna: string;
   ukuran: string;
 };
 
+type SelectType = {
+  value: string;
+  label: string;
+};
+
+const selectVariasiWarna: SelectType[] = [
+  {
+    value: '1',
+    label: 'Hitam',
+  },
+  {
+    value: '2',
+    label: 'Putih 1/2 Telapak Hitam',
+  },
+  {
+    value: '3',
+    label: 'Putih Telapak Hitam Full',
+  },
+];
+
+const selectVariasiUkuran: SelectType[] = [
+  {
+    value: '1',
+    label: '19-20',
+  },
+  {
+    value: '2',
+    label: '21-22',
+  },
+  {
+    value: '3',
+    label: '23-24',
+  },
+];
+
+const selectMesin: SelectType[] = [
+  {
+    value: '1',
+    label: 'THS',
+  },
+  {
+    value: '2',
+    label: 'Yau Shen',
+  },
+  {
+    value: '3',
+    label: 'Manual',
+  },
+];
+
+const selectBahan: SelectType[] = [
+  {
+    value: '1',
+    label: 'PE 30 S',
+  },
+  {
+    value: '2',
+    label: 'Nilon',
+  },
+  {
+    value: '3',
+    label: 'Campuran',
+  },
+];
+
 export default function CreateKaosKakiPage() {
   const [nama, setNama] = useState('');
-  const [mesin, setMesin] = useState('');
+  const [mesin, setMesin] = useState<string[]>([]);
   const [bahan, setBahan] = useState('');
   const [variasi, setVariasi] = useState<VariasiType[]>([{ warna: '', ukuran: '' }]);
   const [foto, setFoto] = useState<File[]>([]);
@@ -77,11 +143,11 @@ export default function CreateKaosKakiPage() {
   return (
     <div className='min-h-screen w-full bg-[#F2F4F7] p-6'>
       <Card className='w-full bg-white rounded-2xl p-3'>
-        <CardHeader>
-          <Button variant='secondary' onClick={handleBack} className='mb-3 cursor-pointer'>
-            Kembali
+        <CardHeader className=''>
+          <Button variant='secondary' onClick={handleBack} className='w-28 mb-3 cursor-pointer'>
+            <ChevronDown className='w-5 h-5 rotate-90' /> Kembali
           </Button>
-          <h1 className='text-2xl font-bold text-gray-900'>Tambah Kaos Kaki</h1>
+          <h1 className='text-2xl font-bold text-gray-900'>Form Kaos Kaki</h1>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className='space-y-6'>
@@ -94,46 +160,60 @@ export default function CreateKaosKakiPage() {
             {/* Mesin */}
             <div>
               <label className='block mb-2 font-medium'>Jenis Mesin</label>
-              <select value={mesin} onChange={(e) => setMesin(e.target.value)} className='w-full border rounded-lg px-4 py-2'>
-                <option value=''>Pilih Mesin</option>
-                <option value='yaushen'>Yaushen</option>
-                <option value='ths'>THS</option>
-                <option value='lonati'>Lonati</option>
-              </select>
+
+              <Select
+                instanceId='selectMesin'
+                isMulti
+                options={selectMesin}
+                onChange={(e) => {
+                  const selected = e.map((opt) => opt.value);
+                  setMesin(selected);
+                }}
+                placeholder='Pilih Mesin...'
+              />
             </div>
 
             {/* Bahan */}
             <div>
               <label className='block mb-2 font-medium'>Bahan</label>
-              <select value={bahan} onChange={(e) => setBahan(e.target.value)} className='w-full border rounded-lg px-4 py-2'>
-                <option value=''>Pilih Bahan</option>
-                <option value='PE 30s'>PE 30s</option>
-                <option value='Cotton Combed 24s'>Cotton Combed 24s</option>
-                <option value='Cotton Carded 30s'>Cotton Carded 30s</option>
-              </select>
+              <Select
+                instanceId='selectBahan'
+                isMulti={false}
+                options={selectBahan}
+                onChange={(e) => {
+                  setBahan(e?.value ?? '');
+                }}
+                placeholder='Pilih Bahan...'
+              />
             </div>
 
             {/* Variasi */}
-            <div>
+            <div className='border p-3 rounded-lg shadow-sm'>
               <label className='block mb-2 font-medium'>Variasi</label>
 
               {variasi.map((item, index) => (
-                <div key={index} className='flex gap-4 mb-3 items-center'>
-                  <select value={item.warna} onChange={(e) => handleVariasiChange(index, 'warna', e.target.value)} className='flex-1 border rounded-lg px-4 py-2'>
-                    <option value=''>Pilih Warna</option>
-                    <option value='hitam'>Hitam</option>
-                    <option value='putih'>Putih</option>
-                    <option value='hijau'>Hijau</option>
-                  </select>
+                <div key={index} className='flex gap-4 mb-3 items-center '>
+                  <Select
+                    instanceId={`selectWarna-${index}`}
+                    value={{ label: selectVariasiWarna.find((e) => e.value === item.warna)?.label ?? 'Pilih Warna...', value: item.warna }}
+                    isMulti={false}
+                    options={selectVariasiWarna}
+                    onChange={(e) => handleVariasiChange(index, 'warna', e?.value ?? '')}
+                    placeholder='Pilih Warna...'
+                    className='flex-1 px-4 py-2'
+                  />
 
-                  <select value={item.ukuran} onChange={(e) => handleVariasiChange(index, 'ukuran', e.target.value)} className='flex-1 border rounded-lg px-4 py-2'>
-                    <option value=''>Pilih Ukuran</option>
-                    <option value='S'>S</option>
-                    <option value='M'>M</option>
-                    <option value='L'>L</option>
-                  </select>
+                  <Select
+                    instanceId={`selectUkuran-${index}`}
+                    value={{ label: selectVariasiUkuran.find((e) => e.value === item.ukuran)?.label ?? 'Pilih Ukuran...', value: item.ukuran }}
+                    isMulti={false}
+                    options={selectVariasiUkuran}
+                    onChange={(e) => handleVariasiChange(index, 'ukuran', e?.value ?? '')}
+                    placeholder='Pilih Ukuran...'
+                    className='flex-1 px-4 py-2'
+                  />
 
-                  <button type='button' onClick={() => hapusVariasi(index)}>
+                  <button type='button' onClick={() => hapusVariasi(index)} className='cursor-pointer'>
                     <X className='w-5 h-5 text-red-500 cursor-pointer hover:bg-black/10' />
                   </button>
                 </div>
@@ -147,7 +227,7 @@ export default function CreateKaosKakiPage() {
             </div>
 
             {/* Upload Foto */}
-            <div>
+            <div className='border p-3 rounded-lg shadow-sm'>
               <label className='block mb-2 font-medium'>Upload Foto</label>
 
               <input type='file' multiple onChange={handleFotoChange} className='mb-4 p-3 bg-blue-500 hover:bg-blue-500/70 text-white text-base text-center rounded-lg h-12 cursor-pointer ' />
