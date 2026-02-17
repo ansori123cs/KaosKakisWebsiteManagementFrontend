@@ -3,10 +3,9 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, Mail, Lock, User, Phone, SquareUser, Dock, StretchVertical, HouseHeart } from 'lucide-react';
-import Button from '@/components/ui/Button';
-import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/Card';
-import Image from 'next/image';
+import { Eye, EyeOff, Mail, Lock, User, Phone, SquareUser, Dock, HouseHeart } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/Card';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -261,7 +260,7 @@ export default function RegisterPage() {
                 </div>
 
                 {/* Submit Button */}
-                <Button type='submit' variant='primary' size='lg' loading={isLoading} className='w-full mt-6'>
+                <Button type='submit' variant='default' size='sm' disabled={isLoading} className='md:w-1/2 '>
                   Daftar
                 </Button>
               </form>

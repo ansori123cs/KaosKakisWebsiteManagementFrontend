@@ -1,7 +1,5 @@
-import React from 'react';
-import { Lock, Bell, Moon } from 'lucide-react';
 import { Card, CardHeader, CardContent } from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 
 export default function SettingsPage() {
   return (
@@ -57,7 +55,7 @@ export default function SettingsPage() {
               </div>
 
               <div className='flex gap-4'>
-                <Button variant='primary'>Save Changes</Button>
+                <Button variant='default'>Save Changes</Button>
                 <Button variant='secondary'>Cancel</Button>
               </div>
             </CardContent>
@@ -70,7 +68,9 @@ export default function SettingsPage() {
             </CardHeader>
             <CardContent className='space-y-4'>
               <p className='text-red-800 text-sm'>Once you delete your account, there is no going back. Please be certain.</p>
-              <Button variant='danger'>Delete Account</Button>
+              <Button variant='destructive' className='text-white'>
+                Delete Account
+              </Button>
             </CardContent>
           </Card>
         </div>

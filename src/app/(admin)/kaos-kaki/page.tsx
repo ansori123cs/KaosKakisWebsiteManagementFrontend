@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/Card';
 import { ListFilter, PlusIcon, Search } from 'lucide-react';
 import Link from 'next/link';
@@ -135,7 +135,7 @@ const KaosKakiPage = () => {
             <p className='text-gray-600'>Kelola dan lihat semua daftar kaos kaki sekolah/uniform di sistem.</p>
           </div>
           <Link href='/kaos-kaki/add' className='w-full md:w-auto'>
-            <Button variant='primary' className='w-full md:w-auto cursor-pointer'>
+            <Button variant='default' className='w-full md:w-auto cursor-pointer'>
               Tambah Kaos Kaki <PlusIcon className='ml-2 h-4 w-4' />
             </Button>
           </Link>
@@ -151,7 +151,7 @@ const KaosKakiPage = () => {
                 <Select instanceId='selectFilter' isMulti={false} isSearchable options={selectCategory} onChange={(e) => setFilter(e?.value ?? '')} placeholder='Pilih Filter...' />
               </div>
 
-              <Button variant='primary' size='sm' onClick={handleFilter} className='w-full sm:w-auto cursor-pointer'>
+              <Button variant='default' size='sm' onClick={handleFilter} className='w-full sm:w-auto cursor-pointer'>
                 Filter.. <ListFilter className='ml-2 h-4 w-4' />
               </Button>
             </div>
@@ -166,7 +166,7 @@ const KaosKakiPage = () => {
                 }}
               />
 
-              <Button variant='primary' size='sm' onClick={handleSearch} className='w-full sm:w-auto cursor-pointer'>
+              <Button variant='default' size='sm' onClick={handleSearch} className='w-full sm:w-auto cursor-pointer'>
                 Cari.. <Search className='ml-2 h-4 w-4' />
               </Button>
             </div>
@@ -199,7 +199,7 @@ const KaosKakiPage = () => {
                       <td className='py-3 px-4'>
                         <div className='flex flex-col sm:flex-row gap-2'>
                           <Button
-                            variant='warning'
+                            variant='default'
                             size='sm'
                             onClick={() => {
                               handleEdit(item.id);
@@ -209,7 +209,8 @@ const KaosKakiPage = () => {
                           </Button>
 
                           <Button
-                            variant='danger'
+                            variant='destructive'
+                            className='text-white'
                             size='sm'
                             onClick={() => {
                               handleDelete(item.id);
@@ -228,10 +229,10 @@ const KaosKakiPage = () => {
           <CardFooter className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
             <p className='text-gray-600 text-sm'>Menampilkan {KaosKakiList.length} kaos kaki</p>
             <div className='flex gap-2 w-full sm:w-auto'>
-              <Button variant='primary' size='sm' className='flex-1 sm:flex-none'>
+              <Button variant='default' size='sm' className='flex-1 sm:flex-none'>
                 Sebelumnya
               </Button>
-              <Button variant='primary' size='sm' className='flex-1 sm:flex-none'>
+              <Button variant='default' size='sm' className='flex-1 sm:flex-none'>
                 Selanjutnya
               </Button>
             </div>

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/Card';
 import Image from 'next/image';
 
@@ -114,7 +114,7 @@ export default function LoginPage() {
                     </p>
                   </div>
                   {/* Submit Button */}
-                  <Button type='submit' variant='primary' size='md' loading={isLoading} className='md:w-1/2 '>
+                  <Button type='submit' variant='default' size='sm' disabled={isLoading} className='md:w-1/2 '>
                     Masuk
                   </Button>
                 </div>

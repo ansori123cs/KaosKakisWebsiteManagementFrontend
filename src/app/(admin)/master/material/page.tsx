@@ -1,12 +1,10 @@
 'use client';
 
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/Card';
-import { ListFilter, PlusIcon, Search } from 'lucide-react';
-import Link from 'next/link';
+import { PlusIcon, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Select from 'react-select';
 import Swal from 'sweetalert2';
 
 const KaosKakiList = [
@@ -119,7 +117,7 @@ const MasterMaterialPage = () => {
             <h1 className='text-3xl font-bold text-gray-900'>Master Bahan</h1>
             <p className='text-gray-600'>Kelola dan lihat semua daftar Bahan</p>
           </div>
-          <Button variant='primary' className='w-full md:w-auto cursor-pointer' onClick={() => setIsPreviewOpen(true)}>
+          <Button variant='default' className='w-full md:w-auto cursor-pointer' onClick={() => setIsPreviewOpen(true)}>
             Tambah Bahan <PlusIcon className='ml-2 h-4 w-4' />
           </Button>
         </div>
@@ -139,7 +137,7 @@ const MasterMaterialPage = () => {
                 }}
               />
 
-              <Button variant='primary' size='sm' onClick={handleSearch} className='w-full sm:w-auto cursor-pointer'>
+              <Button variant='default' size='sm' onClick={handleSearch} className='w-full sm:w-auto cursor-pointer'>
                 Cari.. <Search className='ml-2 h-4 w-4' />
               </Button>
             </div>
@@ -156,14 +154,15 @@ const MasterMaterialPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {KaosKakiList.map((item) => (
+                  {KaosKakiList.map((item, index) => (
                     <tr key={item.id} className='border-b border-gray-200 hover:bg-gray-50'>
+                      <td className='py-3 px-4 text-gray-900 font-medium'>{index + 1}</td>
                       <td className='py-3 px-4 text-gray-900 font-medium'>{item.nama}</td>
                       <td className='py-3 px-4 text-gray-600'>{item.kode}</td>
                       <td className='py-3 px-4'>
                         <div className='flex flex-col sm:flex-row gap-2'>
                           <Button
-                            variant='warning'
+                            variant='default'
                             size='sm'
                             onClick={() => {
                               handleEdit(item.id);
@@ -173,7 +172,8 @@ const MasterMaterialPage = () => {
                           </Button>
 
                           <Button
-                            variant='danger'
+                            variant='destructive'
+                            className='text-white'
                             size='sm'
                             onClick={() => {
                               handleDelete(item.id);
@@ -192,10 +192,10 @@ const MasterMaterialPage = () => {
           <CardFooter className='flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3'>
             <p className='text-gray-600 text-sm'>Menampilkan {KaosKakiList.length} kaos kaki</p>
             <div className='flex gap-2 w-full sm:w-auto'>
-              <Button variant='primary' size='sm' className='flex-1 sm:flex-none'>
+              <Button variant='default' size='sm' className='flex-1 sm:flex-none'>
                 Sebelumnya
               </Button>
-              <Button variant='primary' size='sm' className='flex-1 sm:flex-none'>
+              <Button variant='default' size='sm' className='flex-1 sm:flex-none'>
                 Selanjutnya
               </Button>
             </div>
@@ -236,7 +236,7 @@ const MasterMaterialPage = () => {
                 Tutup
               </Button>
 
-              <Button variant='primary' onClick={handleSubmit}>
+              <Button variant='default' onClick={handleSubmit}>
                 Simpan
               </Button>
             </div>

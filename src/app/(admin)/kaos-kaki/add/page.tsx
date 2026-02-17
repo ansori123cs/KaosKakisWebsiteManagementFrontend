@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import Button from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { Check, ChevronDown, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -262,7 +262,7 @@ const CreateKaosKakiPage = () => {
               </div>
             </div>
             <div className='flex justify-end'>
-              <Button type='submit' variant='primary' className='cursor-pointer'>
+              <Button type='submit' variant='default' className='cursor-pointer'>
                 Simpan <Check className='w-4 h-4 ml-2' />
               </Button>
             </div>
