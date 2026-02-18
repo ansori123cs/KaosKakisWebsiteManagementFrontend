@@ -104,6 +104,8 @@ const OrdersPage = () => {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('');
   const router = useRouter();
+  const { user } = useAuth();
+  const { hasPermission } = usePermission(user?.roles ?? []);
 
   const statusColor: Record<Order['statusOrder'], string> = {
     belum: 'bg-red-500',

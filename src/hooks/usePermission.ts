@@ -8,7 +8,7 @@ type PermissionContext = {
   statusOrder?: OrderStatus;
 };
 
-type Action = 'finishOrder' | 'editOrder' | 'deleteOrder' | 'manageStock';
+type Action = 'finishOrder' | 'editOrder' | 'deleteOrder' | 'manageStock' | 'seeRevenue';
 
 type PermissionRule = {
   roles: Role[];
@@ -28,6 +28,10 @@ const permissionMap: Record<Action, PermissionRule> = {
   },
   manageStock: {
     roles: ['admin stok'],
+  },
+
+  seeRevenue: {
+    roles: ['admin order'],
   },
 };
 

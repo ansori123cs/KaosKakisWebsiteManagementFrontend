@@ -8,6 +8,30 @@ import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/Card';
 import Image from 'next/image';
 import { useAuth } from '@/hooks/useAuth';
+import { Role } from '@/context/AuthContext';
+
+const userLogin = [
+  {
+    username: 'order123cs',
+    password: 'order123',
+    roles: ['admin order'],
+  },
+  {
+    username: 'mesin123cs',
+    password: 'mesin123',
+    roles: ['admin mesin'],
+  },
+  {
+    username: 'stok123cs',
+    password: 'stok123',
+    roles: ['admin stok'],
+  },
+  {
+    username: 'super123cs',
+    password: 'super123',
+    roles: ['super admin'],
+  },
+];
 
 export default function LoginPage() {
   const router = useRouter();
@@ -25,18 +49,22 @@ export default function LoginPage() {
     setError('');
     setIsLoading(true);
 
-    // Simulasi login - dalam production, ini akan ke API
     setTimeout(() => {
-      if (username && password) {
-        // Simpan fake auth state
+      const userFound = userLogin.find((user) => user.username === username && user.password === password);
 
-        login({ id: '1279812793', name: username, roles: ['admin mesin'] });
-
-        router.push('/dashboard');
-      } else {
-        setError('username dan password harus diisi');
+      if (!userFound) {
+        setError('Username atau password salah');
         setIsLoading(false);
+        return;
       }
+
+      login({
+        id: crypto.randomUUID(),
+        name: userFound.username,
+        roles: userFound.roles as Role[],
+      });
+
+      router.push('/dashboard');
     }, 800);
   };
 
@@ -128,11 +156,17 @@ export default function LoginPage() {
             </CardContent>
           </Card>
 
-          {/* Demo Account */}
-          <div className='mt-8 p-4 bg-persebaya-bg rounded-lg border border-gray-300'>
-            <p className='text-xs font-semibold text-persebaya-text mb-2'>Demo Account:</p>
-            <p className='text-xs text-persebaya-text'>username: l123cs</p>
-            <p className='text-xs text-persebaya-text'>Password: l123</p>
+          <div className='mt-8 p-4 bg-gray-100 rounded-lg border border-gray-300'>
+            <p className='text-xs font-semibold mb-2'>Demo Account:</p>
+
+            {userLogin.map((user, index) => (
+              <div key={index} className='text-xs mb-1'>
+                <p>Username: {user.username}</p>
+                <p>Password: {user.password}</p>
+                <p>Role: {user.roles.join(', ')}</p>
+                <hr className='my-1' />
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
