@@ -2,7 +2,7 @@
 
 Website untuk management produk berupa kaos kaki
 
-**Demo Live:** https://kaos-kaki-management.vercel.app :contentReference[oaicite:1]{index=1}
+**Demo Live:** https://kaos-kakis-website-management-front.vercel.app :contentReference[oaicite:1]{index=1}
 
 ## Tentang Project
 
