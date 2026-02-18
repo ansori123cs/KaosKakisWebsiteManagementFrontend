@@ -6,21 +6,35 @@ import { Menu, Bell, Settings, LogOut } from 'lucide-react';
 import { useSidebarStore } from '@/stores/sidebarStore';
 import { Button } from '@/components/ui/button';
 import Dropdown from '@/components/ui/Dropdown';
+import { useAuth } from '@/hooks/useAuth';
+import { useRouter } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 const Navbar: React.FC = () => {
   const { toggleSidebar } = useSidebarStore();
+  const { user, logout } = useAuth();
+  const router = useRouter();
 
-  const user = {
-    nama: 'Ansori',
-    role: 'Admin Kaos Kaki',
+  const handleLogout = () => {
+    console.log('Here');
+    Swal.fire({
+      title: 'Yakin Mau LogOut?',
+      text: 'Anda akan Logout',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Logout!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //logic delete
+        logout();
+        router.push('/login');
+      }
+    });
   };
 
-  const userMenuItems = [
-    { label: 'Profile', onClick: () => console.log('Profile clicked') },
-    { label: 'Settings', onClick: () => console.log('Settings clicked') },
-    { divider: true },
-    { label: 'Logout', onClick: () => console.log('Logout clicked') },
-  ];
+  const userMenuItems = [{ label: 'Profile', onClick: () => console.log('Profile clicked') }, { label: 'Settings', onClick: () => console.log('Settings clicked') }, { divider: true }, { label: 'Logout', onClick: () => handleLogout() }];
 
   return (
     <nav className='fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 z-40 flex items-center  px-4 md:px-6 shadow-sm'>
@@ -54,9 +68,9 @@ const Navbar: React.FC = () => {
           <Dropdown
             trigger={
               <div className='flex items-center gap-2 cursor-pointer px-2 py-1 rounded hover:bg-gray-100 transition'>
-                <div className='w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-semibold'>{user.nama.slice(0, 2)}</div>
+                <div className='w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-semibold'>{user?.name.slice(0, 2)}</div>
                 <span className='hidden md:inline text-sm text-persebaya-text'>
-                  {user.nama} - {user.role}
+                  {user?.name} - {user?.roles}
                 </span>
               </div>
             }

@@ -1,7 +1,11 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/Card';
-import { useParams } from 'next/navigation';
+import { useAuth } from '@/hooks/useAuth';
+import { usePermission } from '@/hooks/usePermission';
+import { useParams, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import Swal from 'sweetalert2';
 
 type Variasi = {
   warna: string;
@@ -21,7 +25,7 @@ type DetailOrder = {
 const Detail: DetailOrder = {
   id: '21874871973',
   namaPemesan: 'Pak Arip',
-  statusOrder: 'belum',
+  statusOrder: 'proses',
   tglPemesanan: new Date(),
   namaKaosKaki: 'SMP N 10 Surabaya',
   variasi: [
@@ -33,7 +37,34 @@ const Detail: DetailOrder = {
 
 const DetailOrderPage = () => {
   const { id } = useParams();
-  const groupedVariasi = Detail.variasi.reduce<Record<string, Variasi[]>>((acc, item) => {
+  const [data, setData] = useState<DetailOrder>({
+    id: '',
+    namaPemesan: '',
+    tglPemesanan: new Date(),
+    statusOrder: 'belum',
+    namaKaosKaki: '',
+    variasi: [],
+  });
+  const router = useRouter();
+
+  //auth context and hooks
+  //auth context
+  const { user } = useAuth();
+  const { hasPermission } = usePermission(user?.roles ?? []);
+
+  const canFinish = hasPermission('finishOrder', {
+    statusOrder: data?.statusOrder,
+  });
+
+  useEffect(() => {
+    const fetchdata = async (id: string | undefined) => {
+      console.log('Fetching data for ID:', id);
+      setData(Detail);
+    };
+    fetchdata(id?.toString());
+  }, [id]);
+
+  const groupedVariasi = data.variasi.reduce<Record<string, Variasi[]>>((acc, item) => {
     if (!acc[item.warna]) {
       acc[item.warna] = [];
     }
@@ -58,9 +89,9 @@ const DetailOrderPage = () => {
       day: '2-digit',
       month: 'long',
       year: 'numeric',
-    }).format(Detail.tglPemesanan);
+    }).format(data.tglPemesanan);
 
-    const groupedVariasi = Detail.variasi.reduce<Record<string, Variasi[]>>((acc, item) => {
+    const groupedVariasi = data.variasi.reduce<Record<string, Variasi[]>>((acc, item) => {
       if (!acc[item.warna]) acc[item.warna] = [];
       acc[item.warna].push(item);
       return acc;
@@ -69,7 +100,7 @@ const DetailOrderPage = () => {
     printWindow.document.write(`
     <html>
       <head>
-        <title>Print Order ${Detail.id}</title>
+        <title>Print Order ${data.id}</title>
         <style>
           body {
             font-family: Arial, sans-serif;
@@ -96,14 +127,14 @@ const DetailOrderPage = () => {
         <h1>Detail Order</h1>
 
         <div class="section">
-          <h3><strong>Nama Pemesan:</strong> ${Detail.namaPemesan}</h3>
+          <h3><strong>Nama Pemesan:</strong> ${data.namaPemesan}</h3>
           <h3><strong>Tanggal:</strong> ${formattedDate}</h3>
    
-          <h3><strong>Status:</strong> ${Detail.statusOrder}</h3>
+          <h3><strong>Status:</strong> ${data.statusOrder}</h3>
         </div>
  <hr />
         <div class="section">
-        <h2><strong>Nama Kaos Kaki:</strong> ${Detail.namaKaosKaki}</h2>
+        <h2><strong>Nama Kaos Kaki:</strong> ${data.namaKaosKaki}</h2>
         <hr />
           <h3>Detail Variasi</h3>
           ${Object.entries(groupedVariasi)
@@ -142,6 +173,32 @@ const DetailOrderPage = () => {
     printWindow.document.close();
   };
 
+  const handleFinish = () => {
+    // Logic untuk menyelesaikan order, misalnya update status di backend
+    Swal.fire({
+      title: 'Apa Anda Yakin?',
+      text: 'Selesaikan Orderan ini?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Selesaikan!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        //logic delete
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Order DI Selesaikan',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        router.push(`/order`);
+      }
+    });
+  };
+
   return (
     <div className='p-1 md:p-2 bg-gray-50 w-full min-h-screen'>
       <Card className='max-w-4xl mx-auto shadow-xl rounded-2xl'>
@@ -149,7 +206,7 @@ const DetailOrderPage = () => {
           <div className='flex flex-col md:flex-row md:items-center md:justify-between gap-3'>
             <h1 className='text-2xl md:text-3xl font-bold text-gray-900'>Detail Order</h1>
 
-            <div className={`${statusColor[Detail.statusOrder]} text-white px-4 py-1 rounded-full text-sm capitalize w-fit`}>{Detail.statusOrder}</div>
+            <div className={`${statusColor[data.statusOrder]} text-white px-4 py-1 rounded-full text-sm capitalize w-fit`}>{data.statusOrder}</div>
           </div>
         </CardHeader>
 
@@ -158,7 +215,7 @@ const DetailOrderPage = () => {
           <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
             <div>
               <p className='text-gray-500 text-sm'>Nama Pemesan</p>
-              <p className='font-semibold text-gray-900'>{Detail.namaPemesan}</p>
+              <p className='font-semibold text-gray-900'>{data.namaPemesan}</p>
             </div>
 
             <div>
@@ -169,7 +226,7 @@ const DetailOrderPage = () => {
                   day: '2-digit',
                   month: 'long',
                   year: 'numeric',
-                }).format(Detail.tglPemesanan)}
+                }).format(data.tglPemesanan)}
               </p>
             </div>
           </div>
@@ -177,7 +234,7 @@ const DetailOrderPage = () => {
           {/* Nama Produk */}
           <div>
             <p className='text-gray-500 text-sm'>Nama Kaos Kaki</p>
-            <p className='font-semibold text-gray-900 text-lg'>{Detail.namaKaosKaki}</p>
+            <p className='font-semibold text-gray-900 text-lg'>{data.namaKaosKaki}</p>
           </div>
 
           {/* Variasi */}
@@ -205,11 +262,15 @@ const DetailOrderPage = () => {
 
           {/* Action */}
           <div className='flex justify-end gap-3'>
-            <Button variant='secondary' onClick={handlePrint}>
+            <Button variant='secondary' className='cursor-pointer' onClick={handlePrint}>
               Print
             </Button>
 
-            {Detail.statusOrder !== 'selesai' && <Button variant='default'>Selesaikan</Button>}
+            {data.statusOrder !== 'selesai' && canFinish && (
+              <Button variant='default' className='cursor-pointer' onClick={handleFinish}>
+                Selesaikan
+              </Button>
+            )}
           </div>
         </CardContent>
       </Card>

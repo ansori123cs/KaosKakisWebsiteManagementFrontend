@@ -7,6 +7,7 @@ import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/Card';
 import Image from 'next/image';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,6 +16,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  //context Auth
+  const { login, isAuthenticated } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +29,9 @@ export default function LoginPage() {
     setTimeout(() => {
       if (username && password) {
         // Simpan fake auth state
-        localStorage.setItem('user', JSON.stringify({ username, name: username }));
+
+        login({ id: '1279812793', name: username, roles: ['admin mesin'] });
+
         router.push('/dashboard');
       } else {
         setError('username dan password harus diisi');
