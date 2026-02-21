@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 export type Role = 'super admin' | 'admin order' | 'admin stok' | 'admin mesin';
@@ -21,17 +22,24 @@ export const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   // Optional: restore from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem('auth_user');
-    if (storedUser) {
-      const set = async () => {
-        setUser(JSON.parse(storedUser));
-      };
-      set();
-    }
-  }, []);
+    const checkUser = async () => {
+      const storedUser = localStorage.getItem('auth_user');
+      if (storedUser) {
+        const set = async () => {
+          setUser(JSON.parse(storedUser));
+        };
+        set();
+        router.push('/dashboard');
+      } else {
+        router.push('/login');
+      }
+    };
+    checkUser();
+  }, [router]);
 
   const login = (userData: User) => {
     setUser(userData);

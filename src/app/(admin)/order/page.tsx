@@ -165,7 +165,7 @@ const OrdersPage = () => {
             <h1 className='text-3xl font-bold text-gray-900'>Order</h1>
             <p className='text-gray-600'>Kelola dan lihat semua daftar order di sistem.</p>
           </div>
-          <Link href='/kaos-kaki/add' className='w-full md:w-auto'>
+          <Link href='/order/add' className='w-full md:w-auto'>
             <Button variant='default' className='w-full md:w-auto cursor-pointer'>
               Order Baru <PlusIcon className='ml-2 h-4 w-4' />
             </Button>
